@@ -68,6 +68,22 @@ def pull_ig_insights(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+def pull_post_analysis(dataset_id, table_id):
+    # Build the table reference
+    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
+    # Query to fetch all data from the table
+    query = f"SELECT * FROM `{table_ref}"
+    try:
+        # Execute the query
+        query_job = client.query(query)
+        result = query_job.result()
+        # Convert the result to a DataFrame
+        data = result.to_dataframe()
+        return data
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")
+        return None
+
 
 # Main Streamlit app
 def main():
@@ -102,6 +118,13 @@ def main():
     st.header("Basic Ad Campaign Test")
     basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
     st.dataframe(basic_ig_df)
+
+    #Get analyzed posts
+    client_dataset_id = "client"
+    client_table_id = "sp_analyzed_posts"
+    st.header("Basic Ad Campaign Test")
+    pa_df = pull_post_analysis(ig_dataset_id, ig_table_id)
+    st.dataframe(pa_df)
 
 if __name__ == "__main__":
     main()
