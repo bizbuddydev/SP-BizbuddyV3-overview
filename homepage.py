@@ -126,10 +126,10 @@ def main():
     #Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
     with ad_overview:
-        st.write("Recent Ad Performance")
+        st.subheader("Recent Ad Performance")
 
     with post_overview:
-        st.write("Recent Organic Performance")
+        st.subheader("Recent Organic Performance")
 
 
 if __name__ == "__main__":
