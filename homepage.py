@@ -130,6 +130,17 @@ def main():
     with ad_overview:
         st.subheader("Recent Ad Performance")
         st.write("Last 30 Days")
+        # Create 3 equally spaced columns
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(label="Total Impressions", value="1.2M", delta="+5%")
+
+        with col2:
+            st.metric(label="Click-Through Rate", value="2.1%", delta="-0.3%")
+
+        with col3:
+            st.metric(label="Conversions", value="8,213", delta="+12%")
 
     with post_overview:
         st.subheader("Recent Organic Performance")
