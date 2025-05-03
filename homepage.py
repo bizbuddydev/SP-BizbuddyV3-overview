@@ -72,7 +72,7 @@ def pull_post_analysis(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}"
+    query = f"SELECT * FROM `{table_ref}`"
     try:
         # Execute the query
         query_job = client.query(query)
