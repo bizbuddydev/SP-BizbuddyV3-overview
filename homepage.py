@@ -52,6 +52,7 @@ def pull_ad_data(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+@st.cache_data
 def pull_ig_insights(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
@@ -68,6 +69,7 @@ def pull_ig_insights(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+@st.cache_data
 def pull_post_analysis(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
@@ -84,6 +86,7 @@ def pull_post_analysis(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+@st.cache_data
 def get_data():
     #Get basic ads
     ad_dataset_id = "facebook_ads"
