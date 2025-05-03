@@ -123,6 +123,7 @@ def main():
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
     st.dataframe(basic_campaign_df)
 
+    #Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
     with ad_overview:
         st.write("Recent Ad Performance")
