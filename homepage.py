@@ -1,25 +1,10 @@
-# ads_campaigns
-#     └── ads_adsets
-#             └── ads_ads
-#                     └── ads_creatives
-#                         ↘️   ig_posts (if object_story_id = media_id)
-
-# ads_ads
-#     └── ads_insights
-
-# ig_posts
-#     └── ig_post_insights
-
-# ig_stories
-#     └── ig_story_insights
-
-
 import streamlit as st
 import pandas as pd
 from google.cloud import bigquery  # If you're using BigQuery
 import requests  # If you're calling the Graph API directly
 import json
 from google.oauth2 import service_account
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
 
