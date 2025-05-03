@@ -4,30 +4,36 @@ from google.cloud import bigquery  # If you're using BigQuery
 import requests  # If you're calling the Graph API directly
 import json
 
+PROJECT_ID = config["bizbuddydemo-v3"]
+page_id = 12101296
+
+# Load credentials and project ID from st.secrets
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+
 # Initialize BigQuery client
-client = bigquery.Client(project="bizbuddydemo-v3")
+client = bigquery.Client(credentials=credentials, project=PROJECT_ID)
 
-def fetch_table_data_by_page(table_id: str, page_id: str, limit: int = 1000):
-    query = f"""
-        SELECT *
-        FROM `{table_id}`
-        WHERE page_id = @page_id
-        LIMIT {limit}
-    """
+# Function to pull data from BigQuery
+def pull_dataframes(dataset_id, table_id):
+    
+    # Build the table reference
+    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
 
-    job_config = bigquery.QueryJobConfig(
-        query_parameters=[
-            bigquery.ScalarQueryParameter("page_id", "STRING", page_id)
-        ]
-    )
-
+    # Query to fetch all data from the table
+    query = f"SELECT * FROM `{table_ref}` WHERE page_id = {PAGE_ID}"
+    
     try:
-        query_job = client.query(query, job_config=job_config)
-        df = query_job.to_dataframe()
-        return df
+        # Execute the query
+        query_job = client.query(query)
+        result = query_job.result()
+        # Convert the result to a DataFrame
+        data = result.to_dataframe()
+        return data
     except Exception as e:
-        st.error(f"Error fetching data from {table_id}: {e}")
-        return pd.DataFrame()
+        st.error(f"Error fetching data: {e}")
+        return None
 
 # Main Streamlit app
 def main():
@@ -35,10 +41,11 @@ def main():
     st.write("This app displays data pulled from the Meta Graph API.")
 
     #Get basic ads
-    table_id = "bizbuddydemo-v3.facebook_ads.basic_ad"
-    page_id = 12101296
+    table_id = "basic_ad"
+    dataset_id = "facebook_ads"
     st.write("Basic Ads Test")
-    fetch_table_data_by_page(table_id, page_id)
+    basic_ad_df = pull_dataframes(dataset_id, table_id)
+    st.dataframe(basic_ad_df)
     
 
 if __name__ == "__main__":
