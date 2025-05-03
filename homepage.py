@@ -23,7 +23,7 @@ def pull_dataframes(dataset_id, table_id):
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
 
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE page_id = {PAGE_ID}"
+    query = f"SELECT * FROM `{table_ref}` WHERE account_id = {PAGE_ID}"
     
     try:
         # Execute the query
