@@ -75,7 +75,7 @@ def main():
 
     #Get ad set
     campaign_dataset_id = "facebook_ads"
-    campaign_table_id = "basic_ad_campaign"
+    campaign_table_id = "basic_campaign"
     st.header("Basic Ad Campaign Test")
     basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
     st.dataframe(basic_campaign_df)
