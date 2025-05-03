@@ -118,6 +118,7 @@ def main():
 
     #Get data
     get_data()
+    st.dataframe(basic_ad_df)
 
 
 if __name__ == "__main__":
