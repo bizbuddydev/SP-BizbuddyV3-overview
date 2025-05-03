@@ -145,7 +145,19 @@ def main():
     with post_overview:
         st.subheader("Recent Organic Performance")
         st.write("Last 30 Days")
+        st.subheader("Recent Ad Performance")
+        st.write("Last 30 Days")
+        # Create 3 equally spaced columns
+        ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
+        with ig_sc1:
+            st.metric(label="Total Posts", value="1.1K", delta="+7%")
+
+        with ig_sc2:
+            st.metric(label="Like Rate", value="2.1%", delta="-30%")
+
+        with ig_sc3:
+            st.metric(label="Conversions", value="763", delta="+4%")
 
 if __name__ == "__main__":
     main()
