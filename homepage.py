@@ -24,7 +24,8 @@ from google.oauth2 import service_account
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
 
 PROJECT_ID = "bizbuddydemo-v3"
-PAGE_ID = 12101296
+FB_PAGE_ID = 12101296
+IG_USER_ID = 17841400708882174
 
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
@@ -39,7 +40,7 @@ def pull_ad_data(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE account_id = {PAGE_ID}"
+    query = f"SELECT * FROM `{table_ref}` WHERE account_id = {FB_PAGE_ID}"
     try:
         # Execute the query
         query_job = client.query(query)
@@ -55,7 +56,7 @@ def pull_ig_insights(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE account_id = {PAGE_ID}"
+    query = f"SELECT * FROM `{table_ref}` WHERE user_id = {IG_USER_ID}"
     try:
         # Execute the query
         query_job = client.query(query)
