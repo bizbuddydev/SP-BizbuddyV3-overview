@@ -3,3 +3,4 @@ pandas
 requests
 google-cloud-bigquery
 google-auth
+db-dtypes
