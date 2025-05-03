@@ -4,7 +4,7 @@ from google.cloud import bigquery  # If you're using BigQuery
 import requests  # If you're calling the Graph API directly
 import json
 
-PROJECT_ID = config["bizbuddydemo-v3"]
+PROJECT_ID = "bizbuddydemo-v3"
 page_id = 12101296
 
 # Load credentials and project ID from st.secrets
