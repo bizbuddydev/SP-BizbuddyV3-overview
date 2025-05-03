@@ -116,6 +116,19 @@ def get_data():
     #return all dfs
     return basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df
 
+# Sample data
+bar_data = pd.DataFrame({
+    'Day': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    'Metric A': [10, 12, 8, 15, 9, 7, 11],
+    'Metric B': [8, 10, 6, 14, 11, 9, 10]
+})
+
+pie_data = {
+    'Category A': 40,
+    'Category B': 25,
+    'Category C': 20,
+    'Category D': 15
+}
 
 # Main Streamlit app
 def main():
@@ -156,6 +169,31 @@ def main():
 
         with ig_sc3:
             st.metric(label="Conversions", value="763", delta="+4%")
+
+    # Layout
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.subheader("Bar Chart: Weekly Metrics")
+        fig, ax = plt.subplots()
+        width = 0.35
+        x = range(len(bar_data))
+    
+        ax.bar([i - width/2 for i in x], bar_data['Metric A'], width=width, label='Metric A')
+        ax.bar([i + width/2 for i in x], bar_data['Metric B'], width=width, label='Metric B')
+        ax.set_xticks(x)
+        ax.set_xticklabels(bar_data['Day'])
+        ax.set_ylabel('Value')
+        ax.set_title('Metrics by Day')
+        ax.legend()
+        st.pyplot(fig)
+    
+    with col2:
+        st.subheader("Pie Chart: Category Share")
+        fig2, ax2 = plt.subplots()
+        ax2.pie(pie_data.values(), labels=pie_data.keys(), autopct='%1.1f%%', startangle=90)
+        ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        st.pyplot(fig2)
 
 if __name__ == "__main__":
     main()
