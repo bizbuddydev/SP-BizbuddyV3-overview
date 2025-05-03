@@ -115,15 +115,15 @@ def main():
     #Get ig posts
     ig_dataset_id = "instagram_business_instagram_business"
     ig_table_id = "instagram_business__posts"
-    st.header("Basic Ad Campaign Test")
+    st.header("Basic Ig Post Test")
     basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
     st.dataframe(basic_ig_df)
 
     #Get analyzed posts
     client_dataset_id = "client"
     client_table_id = "sp_analyzed_posts"
-    st.header("Basic Ad Campaign Test")
-    pa_df = pull_post_analysis(ig_dataset_id, ig_table_id)
+    st.header("Basic Ig Analysis Test")
+    pa_df = pull_post_analysis(client_dataset_id, client_table_id)
     st.dataframe(pa_df)
 
 if __name__ == "__main__":
