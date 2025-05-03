@@ -1,3 +1,19 @@
+# ads_campaigns
+#     └── ads_adsets
+#             └── ads_ads
+#                     └── ads_creatives
+#                         ↘️   ig_posts (if object_story_id = media_id)
+
+# ads_ads
+#     └── ads_insights
+
+# ig_posts
+#     └── ig_post_insights
+
+# ig_stories
+#     └── ig_story_insights
+
+
 import streamlit as st
 import pandas as pd
 from google.cloud import bigquery  # If you're using BigQuery
@@ -18,15 +34,12 @@ credentials = service_account.Credentials.from_service_account_info(
 # Initialize BigQuery client
 client = bigquery.Client(credentials=credentials, project=PROJECT_ID)
 
-# Function to pull data from BigQuery
-def pull_dataframes(dataset_id, table_id):
-    
+# Basic Ad Data
+def pull_ad_data(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
-
     # Query to fetch all data from the table
     query = f"SELECT * FROM `{table_ref}` WHERE account_id = {PAGE_ID}"
-    
     try:
         # Execute the query
         query_job = client.query(query)
@@ -38,18 +51,27 @@ def pull_dataframes(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+
+
 # Main Streamlit app
 def main():
     st.title("Meta Graph API Dashboard")
     st.write("This app displays data pulled from the Meta Graph API.")
 
     #Get basic ads
-    table_id = "basic_ad"
-    dataset_id = "facebook_ads"
-    st.write("Basic Ads Test")
-    basic_ad_df = pull_dataframes(dataset_id, table_id)
+    ad_dataset_id = "facebook_ads"
+    ad_table_id = "basic_ad"
+    st.header("Basic Ads Test")
+    basic_ad_df = pull_ad_data(ad_dataset_id, ad_table_id)
     st.dataframe(basic_ad_df)
-    
+    st.divider()
+
+    #Get ad set
+    adset_dataset_id = "facebook_ads"
+    adset_table_id = "basic_ad_set"
+    st.header("Basic Ad Set Test")
+    basic_adset_df = pull_ad_data(dataset_id, table_id)
+    st.dataframe(basic_adset_df)
 
 if __name__ == "__main__":
     main()
