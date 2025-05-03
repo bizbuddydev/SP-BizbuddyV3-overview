@@ -129,9 +129,11 @@ def main():
     ad_overview, post_overview = st.columns(2)
     with ad_overview:
         st.subheader("Recent Ad Performance")
+        st.write("Last 30 Days")
 
     with post_overview:
         st.subheader("Recent Organic Performance")
+        st.write("Last 30 Days")
 
 
 if __name__ == "__main__":
