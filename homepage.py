@@ -84,47 +84,41 @@ def pull_post_analysis(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
+def get_data():
+    #Get basic ads
+    ad_dataset_id = "facebook_ads"
+    ad_table_id = "basic_ad"
+    basic_ad_df = pull_ad_data(ad_dataset_id, ad_table_id)
+
+    #Get ad set
+    adset_dataset_id = "facebook_ads"
+    adset_table_id = "basic_ad_set"
+    basic_adset_df = pull_ad_data(adset_dataset_id, adset_table_id)
+
+    #Get ad set
+    campaign_dataset_id = "facebook_ads"
+    campaign_table_id = "basic_campaign"
+    basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
+
+    #Get ig posts
+    ig_dataset_id = "instagram_business_instagram_business"
+    ig_table_id = "instagram_business__posts"
+    basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
+
+    #Get analyzed posts
+    client_dataset_id = "client"
+    client_table_id = "sp_analyzed_posts"
+    pa_df = pull_post_analysis(client_dataset_id, client_table_id)
+
 
 # Main Streamlit app
 def main():
     st.title("Meta Graph API Dashboard")
     st.write("This app displays data pulled from the Meta Graph API.")
 
-    #Get basic ads
-    ad_dataset_id = "facebook_ads"
-    ad_table_id = "basic_ad"
-    st.header("Basic Ads Test")
-    basic_ad_df = pull_ad_data(ad_dataset_id, ad_table_id)
-    st.dataframe(basic_ad_df)
-    st.divider()
+    #Get data
+    get_data()
 
-    #Get ad set
-    adset_dataset_id = "facebook_ads"
-    adset_table_id = "basic_ad_set"
-    st.header("Basic Ad Set Test")
-    basic_adset_df = pull_ad_data(adset_dataset_id, adset_table_id)
-    st.dataframe(basic_adset_df)
-
-    #Get ad set
-    campaign_dataset_id = "facebook_ads"
-    campaign_table_id = "basic_campaign"
-    st.header("Basic Ad Campaign Test")
-    basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
-    st.dataframe(basic_campaign_df)
-
-    #Get ig posts
-    ig_dataset_id = "instagram_business_instagram_business"
-    ig_table_id = "instagram_business__posts"
-    st.header("Basic Ig Post Test")
-    basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
-    st.dataframe(basic_ig_df)
-
-    #Get analyzed posts
-    client_dataset_id = "client"
-    client_table_id = "sp_analyzed_posts"
-    st.header("Basic Ig Analysis Test")
-    pa_df = pull_post_analysis(client_dataset_id, client_table_id)
-    st.dataframe(pa_df)
 
 if __name__ == "__main__":
     main()
