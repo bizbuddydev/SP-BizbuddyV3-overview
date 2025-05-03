@@ -5,13 +5,6 @@ import requests  # If you're calling the Graph API directly
 import json
 
 # Initialize BigQuery client
-client = bigquery.Client()
-
-from google.cloud import bigquery
-import pandas as pd
-import streamlit as st
-
-# Initialize BigQuery client
 client = bigquery.Client(project="bizbuddydemo-v3")
 
 def fetch_table_data_by_page(table_id: str, page_id: str, limit: int = 1000):
