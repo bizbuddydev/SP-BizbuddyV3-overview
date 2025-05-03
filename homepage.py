@@ -70,7 +70,7 @@ def main():
     adset_dataset_id = "facebook_ads"
     adset_table_id = "basic_ad_set"
     st.header("Basic Ad Set Test")
-    basic_adset_df = pull_ad_data(dataset_id, table_id)
+    basic_adset_df = pull_ad_data(adset_dataset_id, adset_table_id)
     st.dataframe(basic_adset_df)
 
 if __name__ == "__main__":
