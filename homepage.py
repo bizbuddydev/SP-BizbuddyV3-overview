@@ -145,8 +145,6 @@ def main():
     with post_overview:
         st.subheader("Recent Organic Performance")
         st.write("Last 30 Days")
-        st.subheader("Recent Ad Performance")
-        st.write("Last 30 Days")
         # Create 3 equally spaced columns
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
