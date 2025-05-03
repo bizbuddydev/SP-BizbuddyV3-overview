@@ -6,7 +6,7 @@ import json
 from google.oauth2 import service_account
 
 PROJECT_ID = "bizbuddydemo-v3"
-page_id = 12101296
+PAGE_ID = 12101296
 
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
