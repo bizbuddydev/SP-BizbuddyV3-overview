@@ -110,6 +110,9 @@ def get_data():
     client_table_id = "sp_analyzed_posts"
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
+    #return all dfs
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df
+
 
 # Main Streamlit app
 def main():
