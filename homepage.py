@@ -5,6 +5,8 @@ import requests  # If you're calling the Graph API directly
 import json
 from google.oauth2 import service_account
 
+st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
+
 PROJECT_ID = "bizbuddydemo-v3"
 PAGE_ID = 12101296
 
