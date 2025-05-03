@@ -9,7 +9,7 @@ page_id = 12101296
 
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
+    st.secrets["service_account"]
 )
 
 # Initialize BigQuery client
