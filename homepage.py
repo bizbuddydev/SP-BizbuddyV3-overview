@@ -192,7 +192,7 @@ def main():
         st.plotly_chart(fig2, use_container_width=True)
 
     # Layout
-    col3, col4 = st.columns([2, 1])
+    col3, col4 = st.columns([1, 2])
     
     with col3:
         col3a, col3b = st.columns([1, 2])
