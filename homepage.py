@@ -121,6 +121,12 @@ value = 1245
 delta = "+5%"
 spark_data = [900, 950, 1100, 1230, 1245]
 
+# Sample data
+follower_data = pd.DataFrame({
+    'Date': pd.date_range(start='2024-04-01', periods=14, freq='D'),
+    'Followers': [1020, 1040, 1055, 1068, 1075, 1090, 1102, 1115, 1130, 1142, 1155, 1170, 1180, 1190]
+})
+
 def draw_metric_card(label, value, delta, spark_data, color="green"):
     col1, col2 = st.columns([2, 1])  # Label/value vs sparkline
 
@@ -228,10 +234,24 @@ def main():
         
     with col4:
         st.subheader("Follower Count")
-        st.write("Follower Count")
-        st.write("Follower Count")
-        st.write("Follower Count")
-        st.write("Follower Count")
+        s# Create the line chart
+        fig = px.line(
+            follower_data,
+            x='Date',
+            y='Followers',
+            title='Follower Growth Over Time',
+            markers=True,
+            template='plotly_white'
+        )
+        
+        fig.update_layout(
+            height=400,
+            margin=dict(l=10, r=10, t=40, b=10),
+        )
+        
+        # Display the chart
+        st.plotly_chart(fig, use_container_width=True)
+
 
 if __name__ == "__main__":
     main()
