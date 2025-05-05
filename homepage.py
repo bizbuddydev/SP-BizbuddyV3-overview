@@ -10,9 +10,6 @@ import plotly.express as px
 # Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
 
-# Set theme for vizualizations 
-sns.set_theme(style="whitegrid")
-
 #Load Vars
 PROJECT_ID = "bizbuddydemo-v3"
 FB_PAGE_ID = 12101296
