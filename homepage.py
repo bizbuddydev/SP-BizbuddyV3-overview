@@ -193,7 +193,7 @@ def main():
 
     # Layout
     col3, col4 = st.columns([2, 1])
-    col3a, col3b = st.columns([2, 1])
+    col3a, col3b = st.columns([1, 2])
     
     with col3:
         with col3a:
@@ -219,6 +219,8 @@ def main():
                 plot_bgcolor='rgba(0,0,0,0)'
             )
             st.plotly_chart(fig, use_container_width=True)
+    with col4:
+        st.write("Follower Count")
 
 if __name__ == "__main__":
     main()
