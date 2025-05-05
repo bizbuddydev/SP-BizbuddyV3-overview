@@ -159,6 +159,53 @@ def main():
         st.write("- Ad B: Average")
         st.write("- Ad C: Below Average")
 
+        st.markdown("---")
+    st.markdown("### 🎨 Creative Performance Breakdown")
+
+    col_left, col_right = st.columns(2)
+
+    # --- LEFT: Boosted Post vs Ad ---
+    with col_left:
+        st.subheader("Boosted Post vs Ad")
+
+        st.markdown("**Boosted Post Performance**")
+        st.markdown("- Impressions: 25,000")
+        st.markdown("- Clicks: 950")
+        st.markdown("- CTR: 3.8%")
+        st.markdown("- Conversions: 72")
+
+        st.markdown("**Ad Performance**")
+        st.markdown("- Impressions: 30,000")
+        st.markdown("- Clicks: 870")
+        st.markdown("- CTR: 2.9%")
+        st.markdown("- Conversions: 88")
+
+        st.info("✅ Boosted Post had higher CTR, but the Ad drove more conversions.")
+
+    # --- RIGHT: Video Watch-Through Rate ---
+    with col_right:
+        st.subheader("Video Completion Rates")
+
+        st.markdown("Placeholder chart showing % of users who watched:")
+        st.markdown("- 25% of video")
+        st.markdown("- 50% of video")
+        st.markdown("- 75% of video")
+        st.markdown("- 100% of video")
+
+        # Placeholder stacked bar chart
+        import plotly.graph_objects as go
+        fig_vid = go.Figure(data=[
+            go.Bar(name='Video A', x=['25%', '50%', '75%', '100%'], y=[1000, 800, 500, 300]),
+            go.Bar(name='Video B', x=['25%', '50%', '75%', '100%'], y=[1100, 900, 700, 400])
+        ])
+        fig_vid.update_layout(
+            barmode='group',
+            title="Watch-Through Rates by Video",
+            template="plotly_white"
+        )
+        st.plotly_chart(fig_vid, use_container_width=True)
+
+
 
 if __name__ == "__main__":
     main()
