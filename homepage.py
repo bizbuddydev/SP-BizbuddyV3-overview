@@ -222,11 +222,9 @@ def main():
     
     with col3:
         st.subheader("Organic Performance")
-        col3a, col3b = st.columns([1, 2])
-        with col3a:
-            draw_metric_card("Clicks", 1245, "+5%", [900, 950, 1100, 1230, 1245], "green")
-            draw_metric_card("Leads", 300, "-3%", [320, 310, 305, 295, 300], "red")
-            draw_metric_card("Revenue", "$9.4K", "+12%", [8000, 8400, 8800, 9200, 9400], "blue")
+        draw_metric_card("Clicks", 1245, "+5%", [900, 950, 1100, 1230, 1245], "green")
+        draw_metric_card("Leads", 300, "-3%", [320, 310, 305, 295, 300], "red")
+        draw_metric_card("Revenue", "$9.4K", "+12%", [8000, 8400, 8800, 9200, 9400], "blue")
         
     with col4:
         st.subheader("Follower Count")
