@@ -200,7 +200,6 @@ def main():
             st.markdown("**Clicks**")
             st.markdown(f"<h2 style='margin-bottom: 0'>{value}</h2>", unsafe_allow_html=True)
         
-    with col2:
         with col3b:
             st.markdown(f"**{delta}**")
             fig = go.Figure()
