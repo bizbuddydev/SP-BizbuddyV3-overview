@@ -115,6 +115,10 @@ pie_data = {
     'Category': ['Category A', 'Category B', 'Category C', 'Category D'],
     'Value': [40, 25, 20, 15]
 }
+# Sample data
+value = 1245
+delta = "+5%"
+spark_data = [900, 950, 1100, 1230, 1245]
 
 # Main Streamlit app
 def main():
@@ -185,6 +189,35 @@ def main():
         )
         fig2.update_traces(textinfo='percent+label')
         st.plotly_chart(fig2, use_container_width=True)
+
+    # Layout
+    col3, col4 = st.columns([2, 1])
+    col3a, col3b = st.columns([2, 1])
+    
+    with col3:
+        with col3a:
+            st.markdown("**Clicks**")
+            st.markdown(f"<h2 style='margin-bottom: 0'>{value}</h2>", unsafe_allow_html=True)
+        
+    with col2:
+        with col3b:
+            st.markdown(f"**{delta}**")
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                y=spark_data,
+                mode='lines',
+                line=dict(color='green', width=2),
+                showlegend=False
+            ))
+            fig.update_layout(
+                height=60,
+                margin=dict(l=0, r=0, t=0, b=0),
+                xaxis=dict(visible=False),
+                yaxis=dict(visible=False),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)'
+            )
+            st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
     main()
