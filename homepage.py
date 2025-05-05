@@ -193,9 +193,9 @@ def main():
 
     # Layout
     col3, col4 = st.columns([2, 1])
-    col3a, col3b = st.columns([1, 2])
     
     with col3:
+        col3a, col3b = st.columns([1, 2])
         with col3a:
             st.markdown("**Clicks**")
             st.markdown(f"<h2 style='margin-bottom: 0'>{value}</h2>", unsafe_allow_html=True)
