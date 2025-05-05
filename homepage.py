@@ -165,28 +165,31 @@ def main():
     col1, col2 = st.columns([2, 1])
     # Melt for seaborn
     bar_melted = bar_data.melt(id_vars='Day', var_name='Metric', value_name='Value')
-    
+
     with col1:
         st.subheader("Bar Chart: Weekly Metrics")
-        fig1, ax1 = plt.subplots(figsize=(8, 6), facecolor='none')
-        sns.barplot(data=bar_melted, x='Day', y='Value', hue='Metric', ax=ax1)
-        ax1.set_title('Metrics by Day')
-        fig1.patch.set_alpha(0.0)  # Transparent background
-        st.pyplot(fig1)
+        fig1 = px.bar(
+            bar_melted,
+            x='Day',
+            y='Value',
+            color='Metric',
+            barmode='group',
+            height=500,
+            template='plotly_white'
+        )
+        st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
         st.subheader("Pie Chart: Category Share")
-        fig2, ax2 = plt.subplots(figsize=(6, 6), facecolor='none')
-        wedges, texts, autotexts = ax2.pie(
-            pie_data.values(),
-            labels=pie_data.keys(),
-            autopct='%1.1f%%',
-            startangle=90,
-            textprops={'color': 'black'}
+        fig2 = px.pie(
+            pie_data,
+            names='Category',
+            values='Value',
+            height=500,
+            template='plotly_white'
         )
-        ax2.axis('equal')
-        fig2.patch.set_alpha(0.0)  # Transparent background
-        st.pyplot(fig2)
+        fig2.update_traces(textinfo='percent+label')
+        st.plotly_chart(fig2, use_container_width=True)
 
 if __name__ == "__main__":
     main()
