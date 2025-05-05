@@ -112,10 +112,8 @@ bar_data = pd.DataFrame({
 })
 
 pie_data = {
-    'Category A': 40,
-    'Category B': 25,
-    'Category C': 20,
-    'Category D': 15
+    'Category': ['Category A', 'Category B', 'Category C', 'Category D'],
+    'Value': [40, 25, 20, 15]
 }
 
 # Main Streamlit app
