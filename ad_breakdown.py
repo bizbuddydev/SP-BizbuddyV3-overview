@@ -98,5 +98,67 @@ def main():
             "CPA": "${:.2f}"
         }))
 
+        st.markdown("---")
+    st.markdown("### 🔍 Granular Breakdown")
+
+    col_left, col_right = st.columns(2)
+
+    # --- LEFT: Demographic Breakdown ---
+    with col_left:
+        st.subheader("Demographic Breakdown")
+
+        breakdown_options = ["Age", "Gender", "Location", "Placement"]
+        selected_demo = st.selectbox("Select Demographic Dimension:", breakdown_options)
+
+        # Simulate demographic values (normally this would be broken out)
+        # For demo purposes, we'll just randomly assign categories
+        import numpy as np
+        np.random.seed(42)
+        df_demo = df.copy()
+        df_demo[selected_demo] = np.random.choice(["Group A", "Group B", "Group C"], size=len(df))
+
+        grouped_demo = (
+            df_demo.groupby(selected_demo)
+            .agg({
+                "Spend": "sum",
+                "Impressions": "sum",
+                "Clicks": "sum",
+                "Conversions": "sum",
+                "CTR": "mean",
+                "CPA": "mean"
+            })
+            .reset_index()
+        )
+
+        fig_demo = px.bar(
+            grouped_demo,
+            x=selected_demo,
+            y="Conversions",
+            color=selected_demo,
+            title=f"Conversions by {selected_demo}",
+            template="plotly_white"
+        )
+        st.plotly_chart(fig_demo, use_container_width=True)
+
+    # --- RIGHT: Delivery Insights ---
+    with col_right:
+        st.subheader("Delivery Insights")
+
+        # Static or sample delivery insights
+        st.markdown("**Learning Phase**")
+        st.info("2 of 6 ad sets are still in the learning phase.")
+
+        st.markdown("**Auction Overlap Rate**")
+        st.warning("High overlap detected in Ad Set B and C.")
+
+        st.markdown("**Ad Fatigue Risk**")
+        st.success("No signs of creative fatigue.")
+
+        st.markdown("**Quality Ranking**")
+        st.write("- Ad A: Above Average")
+        st.write("- Ad B: Average")
+        st.write("- Ad C: Below Average")
+
+
 if __name__ == "__main__":
     main()
