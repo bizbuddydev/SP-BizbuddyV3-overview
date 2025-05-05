@@ -128,7 +128,7 @@ follower_data = pd.DataFrame({
 })
 
 def draw_metric_card(label, value, delta, spark_data, color="green"):
-    col1, col2 = st.columns([2, 1])  # Label/value vs sparkline
+    col1, col2 = st.columns([1, 2])  # Label/value vs sparkline
 
     with col1:
         st.markdown(f"**{label}**")
