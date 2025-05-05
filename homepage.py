@@ -163,6 +163,8 @@ def main():
 
     # Layout
     col1, col2 = st.columns([2, 1])
+    # Melt for seaborn
+    bar_melted = bar_data.melt(id_vars='Day', var_name='Metric', value_name='Value')
     
     with col1:
         st.subheader("Bar Chart: Weekly Metrics")
