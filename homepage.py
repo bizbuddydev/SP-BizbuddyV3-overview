@@ -234,7 +234,7 @@ def main():
         
     with col4:
         st.subheader("Follower Count")
-        s# Create the line chart
+        # Create the line chart
         fig = px.line(
             follower_data,
             x='Date',
