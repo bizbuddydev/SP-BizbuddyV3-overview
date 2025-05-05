@@ -5,9 +5,15 @@ import requests  # If you're calling the Graph API directly
 import json
 from google.oauth2 import service_account
 import matplotlib.pyplot as plt
+import seaborn as sns
 
+# Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
 
+# Set theme for vizualizations 
+sns.set_theme(style="whitegrid")
+
+#Load Vars
 PROJECT_ID = "bizbuddydemo-v3"
 FB_PAGE_ID = 12101296
 IG_USER_ID = 17841400708882174
@@ -159,25 +165,25 @@ def main():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.subheader("Bar Chart: Weekly Metrics")
-        fig, ax = plt.subplots()
-        width = 0.35
-        x = range(len(bar_data))
-    
-        ax.bar([i - width/2 for i in x], bar_data['Metric A'], width=width, label='Metric A')
-        ax.bar([i + width/2 for i in x], bar_data['Metric B'], width=width, label='Metric B')
-        ax.set_xticks(x)
-        ax.set_xticklabels(bar_data['Day'])
-        ax.set_ylabel('Value')
-        ax.set_title('Metrics by Day')
-        ax.legend()
-        st.pyplot(fig)
-    
+    st.subheader("Bar Chart: Weekly Metrics")
+    fig1, ax1 = plt.subplots(figsize=(8, 6), facecolor='none')
+    sns.barplot(data=bar_melted, x='Day', y='Value', hue='Metric', ax=ax1)
+    ax1.set_title('Metrics by Day')
+    fig1.patch.set_alpha(0.0)  # Transparent background
+    st.pyplot(fig1)
+
     with col2:
         st.subheader("Pie Chart: Category Share")
-        fig2, ax2 = plt.subplots()
-        ax2.pie(pie_data.values(), labels=pie_data.keys(), autopct='%1.1f%%', startangle=90)
-        ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        fig2, ax2 = plt.subplots(figsize=(6, 6), facecolor='none')
+        wedges, texts, autotexts = ax2.pie(
+            pie_data.values(),
+            labels=pie_data.keys(),
+            autopct='%1.1f%%',
+            startangle=90,
+            textprops={'color': 'black'}
+        )
+        ax2.axis('equal')
+        fig2.patch.set_alpha(0.0)  # Transparent background
         st.pyplot(fig2)
 
 if __name__ == "__main__":
