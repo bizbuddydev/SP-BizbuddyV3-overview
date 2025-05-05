@@ -132,7 +132,7 @@ def draw_metric_card(label, value, delta, spark_data, color="green"):
 
     with col1:
         st.markdown(f"**{label}**")
-        st.markdown(f"<h2 style='margin-bottom: 0'>{value}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='margin-bottom: 0'>{value}</h3>", unsafe_allow_html=True)
         st.markdown(f"<span style='color: {color};'>{delta}</span>", unsafe_allow_html=True)
 
     with col2:
