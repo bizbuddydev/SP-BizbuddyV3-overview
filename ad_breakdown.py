@@ -42,7 +42,16 @@ def main():
     if selected_value != "All":
         df = df[df[selected_dimension] == selected_value]
 
-    # KPI summary
+    # --- Date Filter ---
+    st.markdown("### 📅 Filter by Date")
+    min_date = df["Date"].min()
+    max_date = df["Date"].max()
+    start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
+
+    # Filter by date
+    df = df[(df["Date"] >= pd.to_datetime(start_date)) & (df["Date"] <= pd.to_datetime(end_date))]
+
+    # --- KPI summary ---
     kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
     with kpi_col1:
         st.metric("Total Spend", f"${df['Spend'].sum():,.0f}")
@@ -51,16 +60,43 @@ def main():
     with kpi_col3:
         st.metric("Total Conversions", f"{df['Conversions'].sum():,.0f}")
 
-    # Time series chart
+    # --- Time Series + Table Side-by-Side ---
     st.markdown("### 📈 Performance Over Time")
-    fig = px.line(
-        df.groupby("Date").sum(numeric_only=True).reset_index(),
-        x="Date",
-        y="Spend",
-        title="Spend Over Time",
-        template="plotly_white"
+    left_col, right_col = st.columns([2, 1])
+
+    daily_summary = (
+        df.groupby("Date")
+        .agg({
+            "Spend": "sum",
+            "Impressions": "sum",
+            "Clicks": "sum",
+            "Conversions": "sum",
+            "CTR": "mean",
+            "CPA": "mean"
+        })
+        .reset_index()
     )
-    st.plotly_chart(fig, use_container_width=True)
+
+    with left_col:
+        fig = px.line(
+            daily_summary,
+            x="Date",
+            y="Spend",
+            title="Daily Spend",
+            template="plotly_white"
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    with right_col:
+        st.markdown("#### Daily Metrics")
+        st.dataframe(daily_summary.style.format({
+            "Spend": "${:,.0f}",
+            "Impressions": "{:,.0f}",
+            "Clicks": "{:,.0f}",
+            "Conversions": "{:,.0f}",
+            "CTR": "{:.2f}%",
+            "CPA": "${:.2f}"
+        }))
 
 if __name__ == "__main__":
     main()
