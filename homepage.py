@@ -5,7 +5,7 @@ import requests  # If you're calling the Graph API directly
 import json
 from google.oauth2 import service_account
 import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
 
 # Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
