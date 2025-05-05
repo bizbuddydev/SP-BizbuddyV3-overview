@@ -228,24 +228,6 @@ def main():
             draw_metric_card("Leads", 300, "-3%", [320, 310, 305, 295, 300], "red")
             draw_metric_card("Revenue", "$9.4K", "+12%", [8000, 8400, 8800, 9200, 9400], "blue")
         
-        with col3b:
-            st.markdown(f"**{delta}**")
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(
-                y=spark_data,
-                mode='lines',
-                line=dict(color='green', width=2),
-                showlegend=False
-            ))
-            fig.update_layout(
-                height=60,
-                margin=dict(l=0, r=0, t=0, b=0),
-                xaxis=dict(visible=False),
-                yaxis=dict(visible=False),
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)'
-            )
-            st.plotly_chart(fig, use_container_width=True)
     with col4:
         st.subheader("Follower Count")
         st.write("Follower Count")
