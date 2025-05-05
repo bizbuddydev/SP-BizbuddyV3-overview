@@ -155,8 +155,7 @@ def draw_metric_card(label, value, delta, spark_data, color="green"):
 
 # Main Streamlit app
 def main():
-    st.title("Meta Graph API Dashboard")
-    st.write("This app displays data pulled from the Meta Graph API.")
+    st.title("Stay Pineapple Social Performance Dash")
 
     #Get data
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
