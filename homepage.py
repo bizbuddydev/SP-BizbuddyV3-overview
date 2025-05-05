@@ -220,6 +220,9 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
     with col4:
         st.write("Follower Count")
+        st.write("Follower Count")
+        st.write("Follower Count")
+        st.write("Follower Count")
 
 if __name__ == "__main__":
     main()
