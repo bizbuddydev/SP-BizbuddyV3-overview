@@ -165,12 +165,12 @@ def main():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-    st.subheader("Bar Chart: Weekly Metrics")
-    fig1, ax1 = plt.subplots(figsize=(8, 6), facecolor='none')
-    sns.barplot(data=bar_melted, x='Day', y='Value', hue='Metric', ax=ax1)
-    ax1.set_title('Metrics by Day')
-    fig1.patch.set_alpha(0.0)  # Transparent background
-    st.pyplot(fig1)
+        st.subheader("Bar Chart: Weekly Metrics")
+        fig1, ax1 = plt.subplots(figsize=(8, 6), facecolor='none')
+        sns.barplot(data=bar_melted, x='Day', y='Value', hue='Metric', ax=ax1)
+        ax1.set_title('Metrics by Day')
+        fig1.patch.set_alpha(0.0)  # Transparent background
+        st.pyplot(fig1)
 
     with col2:
         st.subheader("Pie Chart: Category Share")
