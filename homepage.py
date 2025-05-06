@@ -161,6 +161,7 @@ def main():
 
     #Get data
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
+    st.dataframe(basic_ad_df)
 
     # Filter to last 30 days
     today = pd.to_datetime("today").normalize()
