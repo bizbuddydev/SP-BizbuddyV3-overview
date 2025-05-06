@@ -223,7 +223,7 @@ def main():
     col1, col2 = st.columns([2, 1])
     # Melt for seaborn
     # Group by Day of week
-    bar_data = basic_ad_df.groupby('Day')[['spend', 'inline_link_clicks']].sum().reset_index()
+    bar_data = basic_ad_df.groupby('date')[['spend', 'inline_link_clicks']].sum().reset_index()
 
     # Now you can melt it safely
     bar_melted = bar_data.melt(id_vars='date', var_name='spend', value_name='inline_link_clicks')
