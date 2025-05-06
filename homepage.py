@@ -228,6 +228,8 @@ def main():
     # Step 3: Melt for plotly (use 'date' as x-axis)
     bar_melted = bar_data.melt(id_vars='date', var_name='Metric', value_name='Value')
 
+    col1, col2 = st.columns(2)
+
     with col1:
         st.subheader("Spend and Clicks Last 30")
         fig1 = px.bar(
