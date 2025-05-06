@@ -162,6 +162,7 @@ def main():
     #Get data
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
     st.dataframe(basic_ig_df)
+    st.dataframe(basic_ad_df)
 
     # Normalize today and get 30 days ago as a date (not Timestamp)
     today = pd.to_datetime("today").normalize()
