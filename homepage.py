@@ -166,11 +166,11 @@ def main():
     # Filter to last 30 days
     today = pd.to_datetime("today").normalize()
     last_30_days = today - timedelta(days=30)
-    basic_ig_df['Date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
+    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
 
     
     basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
-    basic_ig_df = basic_ig_df[basic_ig_df["created_timestamp"] >= last_30_days]
+    basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
 
     #Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
