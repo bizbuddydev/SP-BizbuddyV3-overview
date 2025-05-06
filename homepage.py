@@ -168,7 +168,7 @@ def main():
     last_30_days = today - timedelta(days=30)
     
     basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
-    basic_ig_df = basic_ig_df[basic_ig_df["timestamp"] >= last_30_days]
+    basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
 
     #Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
