@@ -171,7 +171,7 @@ def main():
     basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
     
     # Convert ad datetime to date (if needed)
-    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date_start']).dt.date
+    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date']).dt.date
     
     # Now this comparison will work
     basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
