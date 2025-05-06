@@ -207,18 +207,16 @@ def main():
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
         with ig_sc1:
-            total_posts = basic_ig_df["id"].nunique()  # Or use 'media_id' depending on schema
+            total_posts = basic_ig_df["post_id"].nunique()  # Or use 'media_id' depending on schema
             st.metric(label="Total Posts", value=f"{total_posts:,}", delta="+7%")
         
         with ig_sc2:
             likes = basic_ig_df["like_count"].sum()
-            followers = basic_ig_df["follower_count"].max() or 1  # fallback to 1 to avoid division by 0
-            like_rate = (likes / followers) * 100
-            st.metric(label="Like Rate", value=f"{like_rate:.1f}%", delta="-30%")
+            st.metric(label="Like Count", value=f"{likes}", delta="-30%")
         
         with ig_sc3:
-            post_conversions = int(basic_ig_df.get("conversions", pd.Series([0])).sum())  # Optional if exists
-            st.metric(label="Conversions", value=f"{post_conversions:,}", delta="+4%")
+            post_comments = int(basic_ig_df.get("comment_count", pd.Series([0])).sum())  # Optional if exists
+            st.metric(label="Comments", value=f"{post_comments:,}", delta="+4%")
 
 
     # Layout
