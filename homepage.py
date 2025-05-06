@@ -219,23 +219,20 @@ def main():
             st.metric(label="Comments", value=f"{post_comments:,}", delta="+4%")
 
 
-    # Layout
-    col1, col2 = st.columns([2, 1])
-
-    # Step 1: Create a 'Day' column based on the weekday (e.g., Mon, Tue)
-    basic_ad_df['Day'] = pd.to_datetime(basic_ad_df['date']).dt.strftime('%a')
+    # Step 1: Ensure 'date' is in datetime format
+    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date'])
     
-    # Step 2: Group by 'Day' and aggregate the metrics
-    bar_data = basic_ad_df.groupby('Day')[['spend', 'inline_link_clicks']].sum().reset_index()
+    # Step 2: Group by actual date
+    bar_data = basic_ad_df.groupby('date')[['spend', 'inline_link_clicks']].sum().reset_index()
     
-    # Step 3: Melt for plotly
-    bar_melted = bar_data.melt(id_vars='Day', var_name='Metric', value_name='Value')
+    # Step 3: Melt for plotly (use 'date' as x-axis)
+    bar_melted = bar_data.melt(id_vars='date', var_name='Metric', value_name='Value')
 
     with col1:
-        st.subheader("Bar Chart: Weekly Metrics")
+        st.subheader("Spend and Clicks Last 30")
         fig1 = px.bar(
             bar_melted,
-            x='Day',
+            x='date',
             y='Value',
             color='Metric',
             barmode='group',
