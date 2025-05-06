@@ -222,7 +222,6 @@ def main():
     # Layout
     col1, col2 = st.columns([2, 1])
 
-    
     # Step 1: Create a 'Day' column based on the weekday (e.g., Mon, Tue)
     basic_ad_df['Day'] = pd.to_datetime(basic_ad_df['date']).dt.strftime('%a')
     
