@@ -7,6 +7,8 @@ from google.oauth2 import service_account
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
+from datetime import datetime, timedelta
+
 
 # Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
@@ -160,6 +162,13 @@ def main():
     #Get data
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
 
+    # Filter to last 30 days
+    today = pd.to_datetime("today").normalize()
+    last_30_days = today - timedelta(days=30)
+    
+    basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
+    basic_ig_df = basic_ig_df[basic_ig_df["timestamp"] >= last_30_days]
+
     #Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
     with ad_overview:
@@ -169,13 +178,18 @@ def main():
         ad_sc1, ad_sc2, ad_sc3 = st.columns(3)
 
         with ad_sc1:
-            st.metric(label="Total Impressions", value="1.2M", delta="+5%")
+            impressions = int(basic_ad_df["impressions"].sum())
+            st.metric(label="Total Impressions", value=f"{impressions:,}", delta="+5%")  # You can replace delta later
 
         with ad_sc2:
-            st.metric(label="Click-Through Rate", value="2.1%", delta="-0.3%")
+            total_clicks = basic_ad_df["clicks"].sum()
+            ctr = (total_clicks / impressions) * 100 if impressions > 0 else 0
+            st.metric(label="Click-Through Rate", value=f"{ctr:.1f}%", delta="-0.3%")
 
         with ad_sc3:
-            st.metric(label="Conversions", value="8,213", delta="+12%")
+            conversions = int(basic_ad_df["conversions"].sum())
+            st.metric(label="Conversions", value=f"{conversions:,}", delta="+12%")
+
 
     with post_overview:
         st.subheader("Recent Organic Performance")
@@ -184,13 +198,19 @@ def main():
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
         with ig_sc1:
-            st.metric(label="Total Posts", value="1.1K", delta="+7%")
-
+            total_posts = basic_ig_df["id"].nunique()  # Or use 'media_id' depending on schema
+            st.metric(label="Total Posts", value=f"{total_posts:,}", delta="+7%")
+        
         with ig_sc2:
-            st.metric(label="Like Rate", value="2.1%", delta="-30%")
-
+            likes = basic_ig_df["like_count"].sum()
+            followers = basic_ig_df["follower_count"].max() or 1  # fallback to 1 to avoid division by 0
+            like_rate = (likes / followers) * 100
+            st.metric(label="Like Rate", value=f"{like_rate:.1f}%", delta="-30%")
+        
         with ig_sc3:
-            st.metric(label="Conversions", value="763", delta="+4%")
+            post_conversions = int(basic_ig_df.get("conversions", pd.Series([0])).sum())  # Optional if exists
+            st.metric(label="Conversions", value=f"{post_conversions:,}", delta="+4%")
+
 
     # Layout
     col1, col2 = st.columns([2, 1])
