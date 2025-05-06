@@ -222,7 +222,11 @@ def main():
     # Layout
     col1, col2 = st.columns([2, 1])
     # Melt for seaborn
-    bar_melted = bar_data.melt(id_vars='Day', var_name='Metric', value_name='Value')
+    # Group by Day of week
+    bar_data = basic_ad_df.groupby('Day')[['spend', 'inline_link_clicks']].sum().reset_index()
+
+    # Now you can melt it safely
+    bar_melted = bar_data.melt(id_vars='date', var_name='spend', value_name='inline_link_clicks')
 
     with col1:
         st.subheader("Bar Chart: Weekly Metrics")
