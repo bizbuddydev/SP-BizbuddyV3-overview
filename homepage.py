@@ -227,6 +227,8 @@ def main():
     # Step 3: Melt for bar chart
     bar_melted = bar_data.melt(id_vars='date', value_vars=['spend', 'inline_link_clicks'],
                                var_name='Metric', value_name='Value')
+
+    col1, col2 = st.columns(2)
     
     # Step 4: Create dual-axis chart
     with col1:
