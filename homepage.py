@@ -191,7 +191,7 @@ def main():
             st.metric(label="Total Impressions", value=f"{impressions:,}", delta="+5%")  # You can replace delta later
 
         with ad_sc2:
-            total_clicks = basic_ad_df["in_line_clicks"].sum()
+            total_clicks = basic_ad_df["inline_link_clicks"].sum()
             ctr = (total_clicks / impressions) * 100 if impressions > 0 else 0
             st.metric(label="Click-Through Rate", value=f"{ctr:.1f}%", delta="-0.3%")
 
