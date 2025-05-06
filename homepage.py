@@ -226,7 +226,7 @@ def main():
     bar_data = basic_ad_df.groupby('date')[['spend', 'inline_link_clicks']].sum().reset_index()
 
     # Now you can melt it safely
-    bar_melted = bar_data.melt(id_vars='date', var_name='spend', value_name='inline_link_clicks')
+    bar_melted = bar_data.melt(id_vars='Day', var_name='Metric', value_name='Value')
 
     with col1:
         st.subheader("Bar Chart: Weekly Metrics")
