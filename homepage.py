@@ -163,12 +163,17 @@ def main():
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
     st.dataframe(basic_ig_df)
 
-    # Filter to last 30 days
+    # Normalize today and get 30 days ago as a date (not Timestamp)
     today = pd.to_datetime("today").normalize()
-    last_30_days = today - timedelta(days=30)
-    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
-
+    last_30_days = (today - timedelta(days=30)).date()  # <-- this is key
     
+    # Convert IG datetime to date
+    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
+    
+    # Convert ad datetime to date (if needed)
+    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date_start']).dt.date
+    
+    # Now this comparison will work
     basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
     basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
 
