@@ -219,41 +219,67 @@ def main():
             st.metric(label="Comments", value=f"{post_comments:,}", delta="+4%")
 
 
-    # Step 1: Ensure 'date' is in datetime format
+    # Step 1: Ensure 'date' is datetime
     basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date'])
     
-    # Step 2: Group by actual date
+    # Step 2: Group and compute CPC
     bar_data = basic_ad_df.groupby('date')[['spend', 'inline_link_clicks']].sum().reset_index()
+    bar_data['CPC'] = bar_data['spend'] / bar_data['inline_link_clicks']
     
-    # Step 3: Melt for plotly (use 'date' as x-axis)
-    bar_melted = bar_data.melt(id_vars='date', var_name='Metric', value_name='Value')
-
-    col1, col2 = st.columns(2)
-
+    # Step 3: Melt for bar chart
+    bar_melted = bar_data.melt(id_vars='date', value_vars=['spend', 'inline_link_clicks'],
+                               var_name='Metric', value_name='Value')
+    
+    # Step 4: Create dual-axis chart
     with col1:
-        st.subheader("Spend and Clicks Last 30")
-        fig1 = px.bar(
-            bar_melted,
-            x='date',
-            y='Value',
-            color='Metric',
+        st.subheader("Bar + Line Chart: Daily Spend, Clicks, and CPC")
+        
+        fig = go.Figure()
+    
+        # Add bar traces
+        for metric in ['spend', 'inline_link_clicks']:
+            df_metric = bar_melted[bar_melted['Metric'] == metric]
+            fig.add_trace(go.Bar(
+                x=df_metric['date'],
+                y=df_metric['Value'],
+                name=metric,
+                yaxis='y1'
+            ))
+    
+        # Add CPC line trace on secondary axis
+        fig.add_trace(go.Scatter(
+            x=bar_data['date'],
+            y=bar_data['CPC'],
+            name='CPC',
+            mode='lines+markers',
+            line=dict(color='black', width=2, dash='dash'),
+            yaxis='y2'
+        ))
+    
+        # Layout config
+        fig.update_layout(
+            template='plotly_white',
+            height=500,
             barmode='group',
-            height=500,
-            template='plotly_white'
+            xaxis=dict(title="Date"),
+            yaxis=dict(title="Spend / Clicks", side='left'),
+            yaxis2=dict(title="CPC ($)", overlaying='y', side='right', showgrid=False),
+            legend=dict(x=0.01, y=0.99)
         )
-        st.plotly_chart(fig1, use_container_width=True)
-
-    with col2:
-        st.subheader("Pie Chart: Category Share")
-        fig2 = px.pie(
-            pie_data,
-            names='Category',
-            values='Value',
-            height=500,
-            template='plotly_white'
-        )
-        fig2.update_traces(textinfo='percent+label')
-        st.plotly_chart(fig2, use_container_width=True)
+    
+        st.plotly_chart(fig, use_container_width=True)
+    
+        with col2:
+            st.subheader("Pie Chart: Category Share")
+            fig2 = px.pie(
+                pie_data,
+                names='Category',
+                values='Value',
+                height=500,
+                template='plotly_white'
+            )
+            fig2.update_traces(textinfo='percent+label')
+            st.plotly_chart(fig2, use_container_width=True)
 
     # Layout
     col3, col4 = st.columns([1, 2])
