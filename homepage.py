@@ -267,7 +267,7 @@ def main():
                 overlaying='y',
                 side='right',
                 showgrid=False,
-                range=[0, bar_data['CPC'].max() * 1]  # tighter range to lift the line visually
+                range=[0, bar_data['CPC'].max() * 1.4]  # tighter range to lift the line visually
             ),
             legend=dict(x=0.01, y=0.99)
         )
