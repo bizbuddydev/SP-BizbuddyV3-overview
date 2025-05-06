@@ -246,26 +246,31 @@ def main():
                 yaxis='y1'
             ))
     
-        # Add CPC line trace on secondary axis
         fig.add_trace(go.Scatter(
-            x=bar_data['date'],
-            y=bar_data['CPC'],
-            name='CPC',
-            mode='lines+markers',
-            line=dict(color='black', width=2, dash='dash'),
-            yaxis='y2'
-        ))
+        x=bar_data['date'],
+        y=bar_data['CPC'],
+        name='CPC',
+        mode='lines+markers',
+        line=dict(color='green', width=3, shape='spline'),
+        yaxis='y2'
+    ))
     
-        # Layout config
-        fig.update_layout(
-            template='plotly_white',
-            height=500,
-            barmode='group',
-            xaxis=dict(title="Date"),
-            yaxis=dict(title="Spend / Clicks", side='left'),
-            yaxis2=dict(title="CPC ($)", overlaying='y', side='right', showgrid=False),
-            legend=dict(x=0.01, y=0.99)
-        )
+    # Update layout to make the CPC axis tighter
+    fig.update_layout(
+        template='plotly_white',
+        height=500,
+        barmode='group',
+        xaxis=dict(title="Date"),
+        yaxis=dict(title="Spend / Clicks", side='left'),
+        yaxis2=dict(
+            title="CPC ($)",
+            overlaying='y',
+            side='right',
+            showgrid=False,
+            range=[0, bar_data['CPC'].max() * 1.2]  # tighter range to lift the line visually
+        ),
+        legend=dict(x=0.01, y=0.99)
+    )
     
         st.plotly_chart(fig, use_container_width=True)
     
