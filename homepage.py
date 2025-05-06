@@ -253,24 +253,24 @@ def main():
         mode='lines+markers',
         line=dict(color='green', width=3, shape='spline'),
         yaxis='y2'
-    ))
-    
-    # Update layout to make the CPC axis tighter
-    fig.update_layout(
-        template='plotly_white',
-        height=500,
-        barmode='group',
-        xaxis=dict(title="Date"),
-        yaxis=dict(title="Spend / Clicks", side='left'),
-        yaxis2=dict(
-            title="CPC ($)",
-            overlaying='y',
-            side='right',
-            showgrid=False,
-            range=[0, bar_data['CPC'].max() * 1.2]  # tighter range to lift the line visually
-        ),
-        legend=dict(x=0.01, y=0.99)
-    )
+        ))
+        
+        # Update layout to make the CPC axis tighter
+        fig.update_layout(
+            template='plotly_white',
+            height=500,
+            barmode='group',
+            xaxis=dict(title="Date"),
+            yaxis=dict(title="Spend / Clicks", side='left'),
+            yaxis2=dict(
+                title="CPC ($)",
+                overlaying='y',
+                side='right',
+                showgrid=False,
+                range=[0, bar_data['CPC'].max() * 1.2]  # tighter range to lift the line visually
+            ),
+            legend=dict(x=0.01, y=0.99)
+        )
     
         st.plotly_chart(fig, use_container_width=True)
     
