@@ -61,6 +61,23 @@ def pull_ig_insights(dataset_id, table_id):
         return None
 
 @st.cache_data
+def pull_ig_account_insights(dataset_id, table_id):
+    # Build the table reference
+    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
+    # Query to fetch all data from the table
+    query = f"SELECT * FROM `{table_ref}` WHERE id = {IG_USER_ID}"
+    try:
+        # Execute the query
+        query_job = client.query(query)
+        result = query_job.result()
+        # Convert the result to a DataFrame
+        data = result.to_dataframe()
+        return data
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")
+        return None
+
+@st.cache_data
 def pull_post_analysis(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
@@ -104,13 +121,18 @@ def get_data():
     ig_table_id = "instagram_business__posts"
     basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
 
+    #Get ig posts
+    ig_account_dataset_id = "instagram_business"
+    ig_account_table_id = "user_insights"
+    ig_account_df = pull_ig_account_insights(ig_dataset_id, ig_table_id)
+
     #Get analyzed posts
     client_dataset_id = "client"
     client_table_id = "sp_analyzed_posts"
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, pa_df
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df
 
 # Sample data
 bar_data = pd.DataFrame({
@@ -166,7 +188,7 @@ def main():
     st.title("Stay Pineapple Social Performance Dash")
 
     #Get data
-    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, pa_df = get_data()
+    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
     st.write(basic_ig_df)
 
     # Normalize today and get 30 days ago as a date (not Timestamp)
