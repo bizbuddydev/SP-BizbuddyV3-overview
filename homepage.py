@@ -184,6 +184,7 @@ def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
     # Calculate sums or averages
     current_value = current_period[metric_col].sum()
     previous_value = previous_period[metric_col].sum()
+    st.write(previous_value)
 
     # Handle divide-by-zero case
     if previous_value == 0:
@@ -384,8 +385,8 @@ def main():
         metric_col2 = "follower_count"
         metric_col3 = "video_photo_saved"
         
-        label1 = "Likes"
-        label2 = "Comments"
+        label1 = "Reach"
+        label2 = "Followers Gained"
         label3 = "Saves"
         
         draw_metric_card_from_df(ig_account_df, metric_col1, label1, color="green", days=30)
