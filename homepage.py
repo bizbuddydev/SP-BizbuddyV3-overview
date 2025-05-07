@@ -283,11 +283,11 @@ def main():
             st.subheader("Pie Chart: Demographic Breakdown")
 
             # Step 1: Let user choose Breakdown (dimension)
-            breakdown_options = basic_demo_data['Breakdown'].unique().tolist()
+            breakdown_options = basic_demo_df['Breakdown'].unique().tolist()
             selected_breakdown = st.selectbox("Break down spend by:", breakdown_options)
             
             # Step 2: Filter data
-            filtered_demo = basic_demo_data[basic_demo_data['Breakdown'] == selected_breakdown]
+            filtered_demo = basic_demo_df[basic_demo_df['Breakdown'] == selected_breakdown]
             
             # Step 3: Group and sum spend
             demo_summary = filtered_demo.groupby('Group')['spend'].sum().reset_index()
