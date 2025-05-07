@@ -184,7 +184,6 @@ def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
     # Calculate sums or averages
     current_value = current_period[metric_col].sum()
     previous_value = previous_period[metric_col].sum()
-    st.write(previous_value)
 
     # Handle divide-by-zero case
     if previous_value == 0:
