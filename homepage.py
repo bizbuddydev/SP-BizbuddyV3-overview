@@ -110,7 +110,7 @@ def get_data():
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, pa_df
 
 # Sample data
 bar_data = pd.DataFrame({
