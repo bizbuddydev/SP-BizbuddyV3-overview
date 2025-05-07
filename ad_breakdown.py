@@ -138,7 +138,6 @@ def main():
 
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
     
-    st.set_page_config(page_title="Ad Performance Dashboard", layout="wide")
     st.title("Ad Performance Overview")
 
     df = get_sample_data()
