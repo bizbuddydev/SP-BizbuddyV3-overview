@@ -373,10 +373,10 @@ def main():
     
     with col3:
         st.subheader("Organic Performance")
-        metric_col = "Likes"
-        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
-        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
-        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
+        metric_col = "like_count"
+        draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
+        draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
+        draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
         
     with col4:
         st.subheader("Follower Count")
