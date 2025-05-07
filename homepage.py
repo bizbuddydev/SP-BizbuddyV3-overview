@@ -396,7 +396,7 @@ def main():
         st.subheader("Follower Count")
 
         today = ig_account_df['date'].max()
-        start_current = today - timedelta(days=days)
+        start_current = today - timedelta(days=30)
     
         # Filter for current and previous periods
         current_period_df = ig_account_df[(ig_account_df['date'] > start_current) & (ig_account_df['date'] <= today)]
