@@ -280,13 +280,27 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
     
         with col2:
-            st.subheader("Pie Chart: Category Share")
+            st.subheader("Pie Chart: Demographic Breakdown")
+
+            # Step 1: Let user choose Breakdown (dimension)
+            breakdown_options = basic_demo_data['Breakdown'].unique().tolist()
+            selected_breakdown = st.selectbox("Break down spend by:", breakdown_options)
+            
+            # Step 2: Filter data
+            filtered_demo = basic_demo_data[basic_demo_data['Breakdown'] == selected_breakdown]
+            
+            # Step 3: Group and sum spend
+            demo_summary = filtered_demo.groupby('Group')['spend'].sum().reset_index()
+            demo_summary.columns = ['Category', 'Value']
+            
+            # Step 4: Plot
             fig2 = px.pie(
-                pie_data,
+                demo_summary,
                 names='Category',
                 values='Value',
                 height=500,
-                template='plotly_white'
+                template='plotly_white',
+                title=f"Spend by {selected_breakdown}"
             )
             fig2.update_traces(textinfo='percent+label')
             st.plotly_chart(fig2, use_container_width=True)
