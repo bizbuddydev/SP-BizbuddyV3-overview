@@ -218,7 +218,7 @@ def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key=f"{label}_sparkline")
 
 
 # Main Streamlit app
