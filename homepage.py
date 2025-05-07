@@ -124,7 +124,7 @@ def get_data():
     #Get ig posts
     ig_account_dataset_id = "instagram_business"
     ig_account_table_id = "user_insights"
-    ig_account_df = pull_ig_account_insights(ig_dataset_id, ig_table_id)
+    ig_account_df = pull_ig_account_insights(ig_account_dataset_id, ig_account_table_id)
 
     #Get analyzed posts
     client_dataset_id = "client"
@@ -374,6 +374,7 @@ def main():
     with col3:
         st.subheader("Organic Performance")
         metric_col = "like_count"
+        label = "Likes"
         draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
         draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
         draw_metric_card_from_df(basic_ig_df, metric_col, label, color="green", days=30)
