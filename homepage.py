@@ -303,6 +303,7 @@ def main():
                 title=f"Spend by {selected_breakdown}"
             )
             fig2.update_traces(textinfo='percent+label')
+            fig2.update_layout(showlegend=False)
             st.plotly_chart(fig2, use_container_width=True)
 
     # Layout
