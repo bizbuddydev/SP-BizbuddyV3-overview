@@ -214,7 +214,7 @@ def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
             x=spark_data.index,
             y=spark_data.values,
             mode='lines',
-            line=dict(color=color, width=2),
+            line=dict(color="blue", width=2),
             showlegend=False
         ))
         fig.update_layout(
