@@ -382,7 +382,7 @@ def main():
     with col4:
         st.subheader("Follower Count")
         # Create the line chart
-        fig = px.line(
+        fig3 = px.line(
             follower_data,
             x='Date',
             y='Followers',
@@ -391,13 +391,13 @@ def main():
             template='plotly_white'
         )
         
-        fig.update_layout(
+        fig3.update_layout(
             height=400,
             margin=dict(l=10, r=10, t=40, b=10),
         )
         
         # Display the chart
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig3, use_container_width=True)
 
 
 if __name__ == "__main__":
