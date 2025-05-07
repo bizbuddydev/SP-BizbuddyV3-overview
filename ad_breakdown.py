@@ -25,6 +25,25 @@ credentials = service_account.Credentials.from_service_account_info(
 # Initialize BigQuery client
 client = bigquery.Client(credentials=credentials, project=PROJECT_ID)
 
+# Sample mock data
+def get_sample_data():
+    dates = pd.date_range(start="2024-04-01", periods=14)
+    data = pd.DataFrame({
+        "Date": dates.tolist() * 3,
+        "Campaign": ["A"]*14 + ["B"]*14 + ["C"]*14,
+        "Ad Set": ["Set 1", "Set 2", "Set 3"] * 14,
+        "Placement": ["Feed", "Stories", "Reels"] * 14,
+        "Location": ["NY", "CA", "TX"] * 14,
+        "Spend": [100 + i for i in range(14)] * 3,
+        "Impressions": [10000 + i * 100 for i in range(14)] * 3,
+        "Clicks": [200 + i * 10 for i in range(14)] * 3,
+        "Conversions": [10 + (i % 5) for i in range(14)] * 3,
+    })
+    data["CTR"] = (data["Clicks"] / data["Impressions"]) * 100
+    data["CPA"] = data["Spend"] / data["Conversions"]
+    return data
+
+
 # Basic Ad Data
 def pull_ad_data(dataset_id, table_id):
     # Build the table reference
