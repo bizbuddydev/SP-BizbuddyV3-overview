@@ -395,12 +395,18 @@ def main():
     with col4:
         st.subheader("Follower Count")
 
-        ig_account_df['Date'] = pd.to_datetime(ig_account_df['date'])
+        today = ig_account_df['date'].max()
+        start_current = today - timedelta(days=days)
+    
+        # Filter for current and previous periods
+        current_period_df = ig_account_df[(ig_account_df['date'] > start_current) & (ig_account_df['date'] <= today)]
+        
+        current_period_df['Date'] = pd.to_datetime(current_period_df['date'])
         #ig_account_df['Follows'] = ig_account_df['follower_count']
-        ig_account_df = (ig_account_df.groupby('Date', as_index=False)['follower_count'].max().sort_values('Date'))
+        current_period_df = (current_period_df.groupby('Date', as_index=False)['follower_count'].max().sort_values('Date'))
         # Create the line chart
         fig3 = px.line(
-            ig_account_df,
+            current_period_df,
             x='Date',
             y='follower_count',
             title='Follower Growth Over Time',
