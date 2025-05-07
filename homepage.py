@@ -156,13 +156,51 @@ follower_data = pd.DataFrame({
     'Followers': [1020, 1040, 1055, 1068, 1075, 1090, 1102, 1115, 1130, 1142, 1155, 1170, 1180, 1190]
 })
 
-def draw_metric_card(label, value, delta, spark_data, color="green"):
-    col1, col2 = st.columns([1, 2])  # Label/value vs sparkline
+
+def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
+    """
+    Draws a Streamlit metric card with a sparkline and 30-day period-over-period delta.
+
+    Args:
+        df: DataFrame with 'date' column and the metric.
+        metric_col: Column name to use for the metric.
+        label: Metric label to display.
+        color: Sparkline color.
+        days: Number of days per period (default 30).
+    """
+    df = df.copy()
+    df['date'] = pd.to_datetime(df['date'])
+    df = df.sort_values('date')
+
+    # Get today and two time windows
+    today = df['date'].max()
+    start_current = today - timedelta(days=days)
+    start_previous = start_current - timedelta(days=days)
+
+    # Filter for current and previous periods
+    current_period = df[(df['date'] > start_current) & (df['date'] <= today)]
+    previous_period = df[(df['date'] > start_previous) & (df['date'] <= start_current)]
+
+    # Calculate sums or averages
+    current_value = current_period[metric_col].sum()
+    previous_value = previous_period[metric_col].sum()
+
+    # Handle divide-by-zero case
+    if previous_value == 0:
+        delta_pct = 0
+    else:
+        delta_pct = ((current_value - previous_value) / previous_value) * 100
+
+    delta_text = f"{delta_pct:+.1f}%"
+    spark_data = current_period[metric_col].values
+
+    # Draw card
+    col1, col2 = st.columns([1, 2])
 
     with col1:
         st.markdown(f"**{label}**")
-        st.markdown(f"<h3 style='margin-bottom: 0'>{value}</h3>", unsafe_allow_html=True)
-        st.markdown(f"<span style='color: {color};'>{delta}</span>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='margin-bottom: 0'>{int(current_value):,}</h3>", unsafe_allow_html=True)
+        st.markdown(f"<span style='color: {color};'>{delta_text}</span>", unsafe_allow_html=True)
 
     with col2:
         fig = go.Figure()
@@ -181,6 +219,7 @@ def draw_metric_card(label, value, delta, spark_data, color="green"):
             plot_bgcolor='rgba(0,0,0,0)'
         )
         st.plotly_chart(fig, use_container_width=True)
+
 
 # Main Streamlit app
 def main():
@@ -334,9 +373,10 @@ def main():
     
     with col3:
         st.subheader("Organic Performance")
-        draw_metric_card("Clicks", 1245, "+5%", [900, 950, 1100, 1230, 1245], "green")
-        draw_metric_card("Leads", 300, "-3%", [320, 310, 305, 295, 300], "red")
-        draw_metric_card("Revenue", "$9.4K", "+12%", [8000, 8400, 8800, 9200, 9400], "blue")
+        metric_col = "Likes"
+        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
+        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
+        draw_metric_card_from_df(df, metric_col, label, color="green", days=30)
         
     with col4:
         st.subheader("Follower Count")
