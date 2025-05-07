@@ -397,7 +397,7 @@ def main():
 
         ig_account_df['Date'] = pd.to_datetime(ig_account_df['date'])
         ig_account_df['Follows'] = ig_account_df['follower_count']
-        ig_account_df = (ig_account_df.groupby('Date', as_index=False)['follower_count'].max().sort_values('date'))
+        ig_account_df = (ig_account_df.groupby('Date', as_index=False)['follower_count'].max().sort_values('Date'))
         # Create the line chart
         fig3 = px.line(
             ig_account_df,
