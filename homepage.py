@@ -134,28 +134,6 @@ def get_data():
     #return all dfs
     return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df
 
-# Sample data
-bar_data = pd.DataFrame({
-    'Day': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    'Metric A': [10, 12, 8, 15, 9, 7, 11],
-    'Metric B': [8, 10, 6, 14, 11, 9, 10]
-})
-
-pie_data = {
-    'Category': ['Category A', 'Category B', 'Category C', 'Category D'],
-    'Value': [40, 25, 20, 15]
-}
-# Sample data
-value = 1245
-delta = "+5%"
-spark_data = [900, 950, 1100, 1230, 1245]
-
-# Sample data
-follower_data = pd.DataFrame({
-    'Date': pd.date_range(start='2024-04-01', periods=14, freq='D'),
-    'Followers': [1020, 1040, 1055, 1068, 1075, 1090, 1102, 1115, 1130, 1142, 1155, 1170, 1180, 1190]
-})
-
 
 def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
     """
