@@ -193,9 +193,12 @@ def draw_metric_card_from_df(df, metric_col, label, color="green", days=30):
 
     delta_text = f"{delta_pct:+.1f}%"
     # Build sparkline from daily values over current period
-    spark_data = current_period.set_index('date')[metric_col]
-    st.write(spark_data)
-
+    spark_data = (
+        current_period
+        .groupby('date')[metric_col]
+        .sum()
+        .sort_index()
+    )
 
     # Draw card
     col1, col2 = st.columns([1, 2])
