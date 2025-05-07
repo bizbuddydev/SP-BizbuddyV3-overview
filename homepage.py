@@ -380,16 +380,16 @@ def main():
     
     with col3:
         st.subheader("Organic Performance")
-        metric_col1 = "like_count"
-        metric_col2 = "comment_count"
+        metric_col1 = "reach"
+        metric_col2 = "follower_count"
         metric_col3 = "video_photo_saved"
         
         label1 = "Likes"
         label2 = "Comments"
         label3 = "Saves"
         
-        draw_metric_card_from_df(basic_ig_df, metric_col1, label1, color="green", days=30)
-        draw_metric_card_from_df(basic_ig_df, metric_col2, label2, color="green", days=30)
+        draw_metric_card_from_df(ig_account_df, metric_col1, label1, color="green", days=30)
+        draw_metric_card_from_df(ig_account_df, metric_col2, label2, color="green", days=30)
         draw_metric_card_from_df(basic_ig_df, metric_col3, label3, color="green", days=30)
         
     with col4:
