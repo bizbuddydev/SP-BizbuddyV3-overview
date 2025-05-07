@@ -94,6 +94,11 @@ def get_data():
     campaign_table_id = "basic_campaign"
     basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
 
+    #Get demo set
+    demo_dataset_id = "client"
+    demo_table_id = "ad_demographics"
+    basic_demo_df = pull_ad_data(demo_dataset_id, demo_table_id)
+
     #Get ig posts
     ig_dataset_id = "instagram_business_instagram_business"
     ig_table_id = "instagram_business__posts"
@@ -160,7 +165,7 @@ def main():
     st.title("Stay Pineapple Social Performance Dash")
 
     #Get data
-    basic_ad_df, basic_adset_df, basic_campaign_df, basic_ig_df, pa_df = get_data()
+    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, pa_df = get_data()
 
     # Normalize today and get 30 days ago as a date (not Timestamp)
     today = pd.to_datetime("today").normalize()
