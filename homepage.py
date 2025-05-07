@@ -394,11 +394,15 @@ def main():
         
     with col4:
         st.subheader("Follower Count")
+
+        ig_account_df['Date'] = pd.to_datetime(df['date'])
+        ig_account_df['Follows'] = ig_account_df['follower_count']
+        ig_account_df = (ig_account_df.groupby('Date', as_index=False)['follower_count'].max().sort_values('date'))
         # Create the line chart
         fig3 = px.line(
-            follower_data,
+            ig_account_df,
             x='Date',
-            y='Followers',
+            y='Follows',
             title='Follower Growth Over Time',
             markers=True,
             template='plotly_white'
