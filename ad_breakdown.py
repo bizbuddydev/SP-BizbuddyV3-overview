@@ -322,13 +322,17 @@ def main():
 
     # --- RIGHT: Delivery Insights ---
     with col_left:
-        st.subheader("📊 Placement & Device Breakdown")
+        st.subheader("📊 Platform & Device Breakdown")
     
         # Select view
-        view_option = st.selectbox("View breakdown by:", ["Device Platform", "Placement"])
+        view_option = st.selectbox("View breakdown by:", ["Device", "Platform"])
     
         # Copy and filter ad-level data
-        pie_df = basic_ad_df.copy()
+        if view_option == "Device":
+            pie_df = basic_device_df.copy()
+        else:
+            pie_df = basic_platform_df.copy()
+
         pie_df['date'] = pd.to_datetime(pie_df['date'])
         pie_df = pie_df[
             (pie_df['date'] >= start_date) & 
@@ -336,12 +340,12 @@ def main():
         ]
     
         # Choose column and label
-        if view_option == "Device Platform":
+        if view_option == "Device":
             pie_col = "device_platform"
             display_label = "Spend by Device"
         else:
-            pie_col = "placement"
-            display_label = "Spend by Placement"
+            pie_col = "publisher_platform"
+            display_label = "Spend by Platform"
     
         # Build pie chart
         if pie_col in pie_df.columns:
