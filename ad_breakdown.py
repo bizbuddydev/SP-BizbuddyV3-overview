@@ -376,7 +376,8 @@ def main():
     # --- RIGHT: Video Watch-Through Rate ---
     with col_right:
         st.subheader("🔗 URL Performance Breakdown")
-    
+
+        st.write(basic_url_df)
         # Clean and filter
         url_df = basic_url_df.copy()
         url_df['date'] = pd.to_datetime(url_df['date'])
@@ -392,7 +393,6 @@ def main():
             "Spend": "spend",
             "Clicks": "inline_link_clicks",
             "Impressions": "impressions",
-            "Conversions": "conversions"
         }
         selected_url_metric_label = st.selectbox("Select metric for URL view:", list(metric_options.keys()), key="url_metric")
         selected_url_metric = metric_options[selected_url_metric_label]
