@@ -156,6 +156,14 @@ def get_data():
 def main():
 
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
+    st.write("basic_ad_df")
+    st.write(basic_ad_df.columns)
+    st.write("basic_adset_df")
+    st.write(basic_adset_df.columns)
+    st.write("basic_campaign_df")
+    st.write(basic_campaign_df.columns)
+    st.write("basic_demo_df")
+    st.write(basic_demo_df.columns)
     
     st.title("Ad Performance Overview")
 
