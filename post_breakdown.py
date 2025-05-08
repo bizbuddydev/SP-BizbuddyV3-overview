@@ -103,22 +103,56 @@ def main():
     # SECTION 1: Filters
     st.markdown("### 🔧 Filter Options")
     col1, col2, col3 = st.columns(3)
+    
     with col1:
-        platform = st.selectbox("Platform", ["Instagram", "Facebook"])
+        platform = st.selectbox("Platform", ["Instagram"], disabled=True)  # Only Instagram available for now
+    
     with col2:
-        content_type = st.selectbox("Content Type", ["Image", "Video", "Carousel", "Reel"])
+        content_type = st.selectbox("Content Type", ["All", "Image", "Video", "Carousel", "Reel"])
+    
     with col3:
-        date_range = st.date_input("Date Range")
-
+        default_start = basic_ig_df['timestamp'].min().date()
+        default_end = basic_ig_df['timestamp'].max().date()
+        date_range = st.date_input("Date Range", [default_start, default_end])
+    
+    # --- Filter Data ---
+    df = basic_ig_df.copy()
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    
+    # Filter by content type
+    if content_type != "All":
+        df = df[df['media_type'].str.lower() == content_type.lower()]
+    
+    # Filter by date
+    if isinstance(date_range, list) and len(date_range) == 2:
+        start_date = pd.to_datetime(date_range[0])
+        end_date = pd.to_datetime(date_range[1])
+        df = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)]
+    
+    # Compute Engagement
+    df['engagement'] = (
+        df.get('like_count', 0) +
+        df.get('comments_count', 0) +
+        df.get('save_count', 0)
+    )
+    
+    # Compute Engagement Rate (safe division)
+    df['engagement_rate'] = df['engagement'] / df['impressions'].replace(0, pd.NA)
+    
     # SECTION 2: Top-Level Metrics
     st.markdown("### 📊 Post-Level Summary Metrics")
     kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
+    
     with kpi_col1:
-        st.metric("Total Posts", "62")
+        st.metric("Total Posts", f"{len(df):,}")
+    
     with kpi_col2:
-        st.metric("Total Impressions", "230,000")
+        st.metric("Total Impressions", f"{int(df['impressions'].sum()):,}")
+    
     with kpi_col3:
-        st.metric("Avg Engagement Rate", "3.2%")
+        avg_er = df['engagement_rate'].mean()
+        st.metric("Avg Engagement Rate", f"{avg_er:.1%}" if pd.notna(avg_er) else "N/A")
+
 
     # SECTION 3: Top Performing Posts Table
     st.markdown("### 🔥 Top Performing Posts")
