@@ -159,13 +159,18 @@ def get_data():
     platform_table_id = "delivery_platform"
     basic_platform_df = pull_ad_data(platform_dataset_id, platform_table_id)
 
+    #Get delivery platform and device
+    url_dataset_id = "facebook_ads_facebook_ads"
+    url_table_id = "facebook_ads__url_report"
+    basic_url_df = pull_ad_data(platform_dataset_id, platform_table_id)
+
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df, basic_url_df
 
 # Layout
 def main():
 
-    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df = get_data()
+    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df, basic_url_df = get_data()
 
     df = get_sample_data()
 
@@ -370,26 +375,48 @@ def main():
 
     # --- RIGHT: Video Watch-Through Rate ---
     with col_right:
-        st.subheader("Video Completion Rates")
-
-        st.markdown("Placeholder chart showing % of users who watched:")
-        st.markdown("- 25% of video")
-        st.markdown("- 50% of video")
-        st.markdown("- 75% of video")
-        st.markdown("- 100% of video")
-
-        # Placeholder stacked bar chart
-        import plotly.graph_objects as go
-        fig_vid = go.Figure(data=[
-            go.Bar(name='Video A', x=['25%', '50%', '75%', '100%'], y=[1000, 800, 500, 300]),
-            go.Bar(name='Video B', x=['25%', '50%', '75%', '100%'], y=[1100, 900, 700, 400])
-        ])
-        fig_vid.update_layout(
-            barmode='group',
-            title="Watch-Through Rates by Video",
-            template="plotly_white"
-        )
-        st.plotly_chart(fig_vid, use_container_width=True)
+        st.subheader("🔗 URL Performance Breakdown")
+    
+        # Clean and filter
+        url_df = basic_url_df.copy()
+        url_df['date'] = pd.to_datetime(url_df['date'])
+    
+        # Filter by selected date range
+        url_df = url_df[
+            (url_df['date'] >= start_date) &
+            (url_df['date'] <= end_date)
+        ]
+    
+        # Metric selection
+        metric_options = {
+            "Spend": "spend",
+            "Clicks": "inline_link_clicks",
+            "Impressions": "impressions",
+            "Conversions": "conversions"
+        }
+        selected_url_metric_label = st.selectbox("Select metric for URL view:", list(metric_options.keys()), key="url_metric")
+        selected_url_metric = metric_options[selected_url_metric_label]
+    
+        # Group by base URL
+        if "base_url" in url_df.columns and selected_url_metric in url_df.columns:
+            url_summary = (
+                url_df.groupby("base_url")[selected_url_metric]
+                .sum()
+                .reset_index()
+                .sort_values(by=selected_url_metric, ascending=False)
+            )
+    
+            fig_url = px.bar(
+                url_summary,
+                x="base_url",
+                y=selected_url_metric,
+                title=f"{selected_url_metric_label} by URL",
+                template="plotly_white"
+            )
+            fig_url.update_layout(xaxis_title="Base URL", yaxis_title=selected_url_metric_label)
+            st.plotly_chart(fig_url, use_container_width=True)
+        else:
+            st.info("Required fields not available in `basic_url_df`.")
 
 
 
