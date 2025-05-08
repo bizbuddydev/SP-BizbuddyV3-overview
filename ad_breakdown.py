@@ -161,7 +161,7 @@ def main():
 
     df = get_sample_data()
 
-    st.markdown("### 📊 General PerformancOverview")
+    st.markdown("### 📊 General Performance Overview")
 
     # Dimension selection
     dimension_options = ["Campaign", "Ad Set", "Placement", "Location"]
