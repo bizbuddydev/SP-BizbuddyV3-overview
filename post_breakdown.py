@@ -111,10 +111,10 @@ def main():
         content_type = st.selectbox("Content Type", ["All"] + media_types)
 
     with col2:
-        basic_ig_df['created_timestamp'] = pd.to_datetime(basic_ig_df['created_timestamp'])
+        basic_ig_df['created_timestamp'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
         default_end = basic_ig_df['created_timestamp'].max()
         default_start = default_end - timedelta(days=30)
-        selected_dates = st.date_input("Date Range", [default_start.date(), default_end.date()])
+        selected_dates = st.date_input("Date Range", [default_start, default_end])
 
     # --- SECTION 2: SCORECARDS ---
     st.markdown("### 📊 Account Overview")
@@ -131,18 +131,17 @@ def main():
 
     # Filtered copy of post data
     df = basic_ig_df.copy()
-    df['timestamp'] = pd.to_datetime(df['created_timestamp'])
-    st.dataframe(df)
+    df['date'] = pd.to_datetime(df['created_timestamp']).dt.date
 
     # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
 
-    # Date filtering (with explicit .dt.date comparison)
+    # Date filtering using standard date format
     if not df.empty and isinstance(selected_dates, list) and len(selected_dates) == 2:
-        start_date = pd.to_datetime(selected_dates[0])
-        end_date = pd.to_datetime(selected_dates[1])
-        df = df[(df["timestamp"] >= start_date) & (df["date"] <= end_date)]
+        start_date = selected_dates[0]
+        end_date = selected_dates[1]
+        df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     else:
         st.warning("No data available for selected filters.")
         return
@@ -179,6 +178,7 @@ def main():
     with kpi5:
         avg_eng_rate = df['engagement_rate'].mean()
         st.metric("Engagement Rate", f"{avg_eng_rate:.1%}" if pd.notna(avg_eng_rate) else "N/A")
+
 
 
     # SECTION 3: Top Performing Posts Table
