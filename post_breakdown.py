@@ -112,9 +112,9 @@ def main():
 
     with col2:
         basic_ig_df['created_timestamp'] = pd.to_datetime(basic_ig_df['created_timestamp'])
-        default_end = basic_ig_df['created_timestamp'].max().date()
+        default_end = basic_ig_df['created_timestamp'].max()
         default_start = default_end - timedelta(days=30)
-        date_range = st.date_input("Date Range", [default_start, default_end])
+        selected_dates = st.date_input("Date Range", [default_start.date(), default_end.date()])
 
     # --- SECTION 2: SCORECARDS ---
     st.markdown("### 📊 Account Overview")
@@ -137,11 +137,12 @@ def main():
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
 
-    # Date filtering
-    if isinstance(date_range, list) and len(date_range) == 2:
-        start_date = pd.to_datetime(date_range[0])
-        end_date = pd.to_datetime(date_range[1])
-        df = df[(df['timestamp'].dt.date >= start_date.date()) & (df['timestamp'].dt.date <= end_date.date())]
+    # Date filtering (replacing broken version with known-working structure)
+    if not df.empty:
+        df = df[(df['timestamp'] >= pd.to_datetime(selected_dates[0])) & (df['timestamp'] <= pd.to_datetime(selected_dates[1]))]
+    else:
+        st.warning("No data available for selected filters.")
+        return
 
     # Clean engagement fields
     df['engagement'] = (
