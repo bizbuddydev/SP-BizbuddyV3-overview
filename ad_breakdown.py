@@ -212,18 +212,20 @@ def main():
     
         # Gracefully handle single date selection
         if isinstance(selected_dates, (datetime, pd.Timestamp)):
-            start_date = end_date = selected_dates
+            start_date = end_date = pd.to_datetime(selected_dates)
         elif isinstance(selected_dates, (list, tuple)) and len(selected_dates) == 2:
-            start_date, end_date = selected_dates
+            start_date, end_date = pd.to_datetime(selected_dates[0]), pd.to_datetime(selected_dates[1])
         else:
             st.warning("Please select a valid date range.")
             return
     
-        # Apply date filter
-        df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
+        # Force df['date'] to datetime and filter
+        df['date'] = pd.to_datetime(df['date'])
+        df = df[(df["date"] >= start_date) & (df["date"] <= end_date)]
     else:
         st.warning("No data available for the selected breakdown.")
         return
+
 
 
     
