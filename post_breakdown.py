@@ -114,7 +114,7 @@ def main():
     
     with col3:
         default_start = basic_ig_df['created_timestamp'].min().date()
-        default_end = basic_ig_df['timestamp'].max().date()
+        default_end = basic_ig_df['created_timestamp'].max().date()
         date_range = st.date_input("Date Range", [default_start, default_end])
     
     # --- Filter Data ---
