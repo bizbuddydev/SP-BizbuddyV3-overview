@@ -140,15 +140,22 @@ def main():
     st.write(df)
 
     # Date filtering using standard date format
-    if not df.empty and isinstance(selected_dates, list) and len(selected_dates) == 2:
-        start_date = selected_dates[0]
-        end_date = selected_dates[1]
+    start_date, end_date = None, None
+    
+    if isinstance(selected_dates, (list, tuple)) and len(selected_dates) == 2:
+        start_date, end_date = selected_dates[0], selected_dates[1]
+    elif isinstance(selected_dates, (datetime, pd.Timestamp)):
+        start_date = end_date = selected_dates
+    
+    # Print debug info (optional)
+    # st.write("Start:", start_date, "End:", end_date)
+    
+    if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     else:
-        st.warning("No data available for selected filters.")
-        st.write(start_date) 
-        st.write(end_date)
+        st.warning("Invalid date selection.")
         return
+
 
 
 
