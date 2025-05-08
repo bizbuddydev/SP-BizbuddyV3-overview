@@ -261,8 +261,21 @@ def main():
     with kpi_col3:
         st.metric("Total Link Clicks", f"{df['inline_link_clicks'].sum():,.0f}")
 
-    # === Time Series Chart ===
-    st.markdown("### 📈 Spend Over Time")
+    # === Time Series Chart with Dynamic Metric Selection ===
+    st.markdown("### 📈 Performance Over Time")
+    
+    # Let user pick metric
+    metric_options = {
+        "Spend": "spend",
+        "Impressions": "impressions",
+        "Clicks": "inline_link_clicks",
+        "CTR (Click-through Rate)": "ctr",
+        "CPC (Cost per Click)": "cpc"
+    }
+    selected_metric_label = st.selectbox("Select metric to display:", list(metric_options.keys()))
+    selected_metric = metric_options[selected_metric_label]
+    
+    # Group and calculate daily metrics
     daily_summary = (
         df.groupby(["date", group_col])
         .agg({
@@ -272,16 +285,24 @@ def main():
         })
         .reset_index()
     )
-
+    
+    # Compute CTR and CPC
+    daily_summary["ctr"] = (daily_summary["inline_link_clicks"] / daily_summary["impressions"]) * 100
+    daily_summary["cpc"] = daily_summary["spend"] / daily_summary["inline_link_clicks"]
+    daily_summary = daily_summary.replace([float("inf"), -float("inf")], pd.NA).fillna(0)
+    
+    # Plot
     fig = px.line(
         daily_summary,
         x="date",
-        y="spend",
+        y=selected_metric,
         color=group_col,
-        title=f"Spend Over Time by {selected_breakdown}",
-        template="plotly_white"
+        title=f"{selected_metric_label} Over Time by {selected_breakdown}",
+        template="plotly_white",
+        labels={selected_metric: selected_metric_label}
     )
     st.plotly_chart(fig, use_container_width=True)
+
 
     st.markdown("### 🎨 Creative Performance Breakdown")
     
