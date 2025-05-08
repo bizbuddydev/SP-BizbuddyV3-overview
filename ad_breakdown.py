@@ -212,11 +212,11 @@ def main():
     # === Multiselect breakdown filter ===
     group_values = df[group_col].dropna().unique().tolist()
     with st.expander(f"🔍 Filter by {selected_breakdown} values", expanded=False):
-    selected_groups = st.multiselect(
-        f"Select one or more {selected_breakdown} values:",
-        options=group_values,
-        default=group_values
-    )
+        selected_groups = st.multiselect(
+            f"Select one or more {selected_breakdown} values:",
+            options=group_values,
+            default=group_values
+        )
     df = df[df[group_col].isin(selected_groups)]
 
 
