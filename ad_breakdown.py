@@ -312,24 +312,48 @@ def main():
 
     # --- RIGHT: Delivery Insights ---
     with col_left:
-        st.subheader("Delivery Insights")
+        st.subheader("📊 Placement & Device Breakdown")
+    
+        # Select view
+        view_option = st.selectbox("View breakdown by:", ["Device Platform", "Placement"])
+    
+        # Copy and filter ad-level data
+        pie_df = basic_ad_df.copy()
+        pie_df['date'] = pd.to_datetime(pie_df['date'])
+        pie_df = pie_df[
+            (pie_df['date'] >= start_date) & 
+            (pie_df['date'] <= end_date)
+        ]
+    
+        # Choose column and label
+        if view_option == "Device Platform":
+            pie_col = "device_platform"
+            display_label = "Spend by Device"
+        else:
+            pie_col = "placement"
+            display_label = "Spend by Placement"
+    
+        # Build pie chart
+        if pie_col in pie_df.columns:
+            pie_summary = (
+                pie_df.groupby(pie_col)['spend']
+                .sum()
+                .reset_index()
+                .rename(columns={pie_col: 'Category', 'spend': 'Spend'})
+            )
+    
+            fig_pie = px.pie(
+                pie_summary,
+                names='Category',
+                values='Spend',
+                title=display_label,
+                template='plotly_white'
+            )
+            fig_pie.update_traces(textinfo='percent+label')
+            st.plotly_chart(fig_pie, use_container_width=True)
+        else:
+            st.info(f"{pie_col} data not available.")
 
-        # Static or sample delivery insights
-        st.markdown("**Learning Phase**")
-        st.info("2 of 6 ad sets are still in the learning phase.")
-
-        st.markdown("**Auction Overlap Rate**")
-        st.warning("High overlap detected in Ad Set B and C.")
-
-        st.markdown("**Ad Fatigue Risk**")
-        st.success("No signs of creative fatigue.")
-
-        st.markdown("**Quality Ranking**")
-        st.write("- Ad A: Above Average")
-        st.write("- Ad B: Average")
-        st.write("- Ad C: Below Average")
-
-        st.markdown("---")
 
     # --- RIGHT: Video Watch-Through Rate ---
     with col_right:
