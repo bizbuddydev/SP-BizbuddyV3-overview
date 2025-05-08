@@ -391,16 +391,16 @@ def main():
         # Metric selection
         metric_options = {
             "Spend": "spend",
-            "Clicks": "inline_link_clicks",
+            "Clicks": "clicks",
             "Impressions": "impressions",
         }
         selected_url_metric_label = st.selectbox("Select metric for URL view:", list(metric_options.keys()), key="url_metric")
         selected_url_metric = metric_options[selected_url_metric_label]
     
         # Group by base URL
-        if "base_url" in url_df.columns and selected_url_metric in url_df.columns:
+        if "url_host" in url_df.columns and selected_url_metric in url_df.columns:
             url_summary = (
-                url_df.groupby("base_url")[selected_url_metric]
+                url_df.groupby("url_host")[selected_url_metric]
                 .sum()
                 .reset_index()
                 .sort_values(by=selected_url_metric, ascending=False)
@@ -408,7 +408,7 @@ def main():
     
             fig_url = px.bar(
                 url_summary,
-                x="base_url",
+                x="url_host",
                 y=selected_url_metric,
                 title=f"{selected_url_metric_label} by URL",
                 template="plotly_white"
