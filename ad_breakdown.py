@@ -184,12 +184,24 @@ def main():
             "filter_on": "Breakdown",
             "filter_value": "Age"
         },
+        "Age/Gender": {
+            "df": basic_demo_df,
+            "group_col": "Group",
+            "filter_on": "Breakdown",
+            "filter_value": "Age/Gender"
+        },
         "Region": {
             "df": basic_demo_df,
             "group_col": "Group",
             "filter_on": "Breakdown",
             "filter_value": "Region"
-        }
+        },
+        "DMA": {
+            "df": basic_demo_df,
+            "group_col": "Group",
+            "filter_on": "Breakdown",
+            "filter_value": "DMA"
+        },
     }
 
     # === User selects breakdown ===
