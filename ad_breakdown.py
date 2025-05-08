@@ -283,45 +283,10 @@ def main():
     )
     st.plotly_chart(fig, use_container_width=True)
 
-
-    with col_left:
-        st.subheader("Demographic Breakdown")
-
-        breakdown_options = ["Age", "Gender", "Location", "Placement"]
-        selected_demo = st.selectbox("Select Demographic Dimension:", breakdown_options)
-
-        # Simulate demographic values (normally this would be broken out)
-        # For demo purposes, we'll just randomly assign categories
-        import numpy as np
-        np.random.seed(42)
-        df_demo = df.copy()
-        df_demo[selected_demo] = np.random.choice(["Group A", "Group B", "Group C"], size=len(df))
-
-        grouped_demo = (
-            df_demo.groupby(selected_demo)
-            .agg({
-                "Spend": "sum",
-                "Impressions": "sum",
-                "Clicks": "sum",
-                "Conversions": "sum",
-                "CTR": "mean",
-                "CPA": "mean"
-            })
-            .reset_index()
-        )
-
-        fig_demo = px.bar(
-            grouped_demo,
-            x=selected_demo,
-            y="Conversions",
-            color=selected_demo,
-            title=f"Conversions by {selected_demo}",
-            template="plotly_white"
-        )
-        st.plotly_chart(fig_demo, use_container_width=True)
+    col_left, col_right = st.columns(2)
 
     # --- RIGHT: Delivery Insights ---
-    with col_right:
+    with col_left:
         st.subheader("Delivery Insights")
 
         # Static or sample delivery insights
@@ -341,26 +306,6 @@ def main():
 
         st.markdown("---")
     st.markdown("### 🎨 Creative Performance Breakdown")
-
-    col_left, col_right = st.columns(2)
-
-    # --- LEFT: Boosted Post vs Ad ---
-    with col_left:
-        st.subheader("Boosted Post vs Ad")
-
-        st.markdown("**Boosted Post Performance**")
-        st.markdown("- Impressions: 25,000")
-        st.markdown("- Clicks: 950")
-        st.markdown("- CTR: 3.8%")
-        st.markdown("- Conversions: 72")
-
-        st.markdown("**Ad Performance**")
-        st.markdown("- Impressions: 30,000")
-        st.markdown("- Clicks: 870")
-        st.markdown("- CTR: 2.9%")
-        st.markdown("- Conversions: 88")
-
-        st.info("✅ Boosted Post had higher CTR, but the Ad drove more conversions.")
 
     # --- RIGHT: Video Watch-Through Rate ---
     with col_right:
