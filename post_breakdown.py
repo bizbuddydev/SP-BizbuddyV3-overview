@@ -95,10 +95,12 @@ def get_data():
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df
+    return basic_ig_df, ig_account_df, pa_df
 
 def main():
+    basic_ig_df, ig_account_df, pa_df = get_data()
     st.title("📱 Social Post Breakdown")
+    st.write(basic_id_df)
 
     # SECTION 1: Filters
     st.markdown("### 🔧 Filter Options")
@@ -111,7 +113,7 @@ def main():
         content_type = st.selectbox("Content Type", ["All", "Image", "Video", "Carousel", "Reel"])
     
     with col3:
-        default_start = basic_ig_df['timestamp'].min().date()
+        default_start = basic_ig_df['created_timestamp'].min().date()
         default_end = basic_ig_df['timestamp'].max().date()
         date_range = st.date_input("Date Range", [default_start, default_end])
     
