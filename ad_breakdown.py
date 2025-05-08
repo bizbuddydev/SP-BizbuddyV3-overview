@@ -197,23 +197,23 @@ def main():
     breakdown_info = breakdown_options[selected_breakdown]
     df = breakdown_info["df"].copy()
     group_col = breakdown_info["group_col"]
-
+    
     # === Optional demo filtering ===
     if "filter_on" in breakdown_info:
         df = df[df[breakdown_info["filter_on"]] == breakdown_info["filter_value"]]
-
+    
     # === Standardize and filter dates ===
     df['date'] = pd.to_datetime(df['date'])
     min_date = df['date'].min()
     max_date = df['date'].max()
     start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
     df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
-
-    # Multiselect filter
-    selected_groups = st.multiselect(f"Filter by {selected_breakdown}:", options=group_values, default=group_values)
     
-    # Filter the DataFrame
+    # === Multiselect breakdown filter ===
+    group_values = df[group_col].dropna().unique().tolist()
+    selected_groups = st.multiselect(f"Filter by {selected_breakdown}:", options=group_values, default=group_values)
     df = df[df[group_col].isin(selected_groups)]
+
 
     # === KPI summary ===
     st.markdown("### 📌 Summary Metrics")
