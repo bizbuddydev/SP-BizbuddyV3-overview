@@ -121,12 +121,12 @@ def main():
     sc1, sc2 = st.columns(2)
 
     with sc1:
-        account_name = ig_account_df['username'].iloc[0] if 'username' in ig_account_df.columns else "Instagram Account"
+        account_name = basic_ig_df['username'].iloc[0]
         st.metric("Account", account_name)
 
     with sc2:
         followers_col = 'follower_count' if 'follower_count' in ig_account_df.columns else 'followers_count'
-        latest_followers = ig_account_df[followers_col].iloc[-1] if followers_col in ig_account_df.columns else "N/A"
+        latest_followers = ig_account_df[followers_col].sum() if followers_col in ig_account_df.columns else "N/A"
         st.metric("Total Followers", f"{int(latest_followers):,}" if pd.notna(latest_followers) else "N/A")
 
     # Filtered copy of post data
@@ -136,8 +136,6 @@ def main():
     # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
-
-    st.write(df)
 
     # Date filtering using standard date format
     start_date, end_date = None, None
@@ -181,7 +179,7 @@ def main():
         st.metric("Total Reach", f"{int(total_reach):,}")
 
     with kpi3:
-        follower_gain = ig_account_df['follower_count'].diff().sum() if 'follower_count' in ig_account_df.columns else 0
+        follower_gain = ig_account_df['follower_count'].sum() if 'follower_count' in ig_account_df.columns else 0
         st.metric("Followers Gained", f"{int(follower_gain):,}")
 
     with kpi4:
