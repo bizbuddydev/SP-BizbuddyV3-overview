@@ -100,60 +100,81 @@ def get_data():
 def main():
     basic_ig_df, ig_account_df, pa_df = get_data()
     st.title("📱 Social Post Breakdown")
-    #st.write(basic_ig_df)
 
-    # SECTION 1: Filters
+    # --- SECTION 1: FILTERS ---
     st.markdown("### 🔧 Filter Options")
-    col1, col2, col3 = st.columns(3)
-    
+    col1, col2 = st.columns(2)
+
     with col1:
-        platform = st.selectbox("Platform", ["Instagram"], disabled=True)  # Only Instagram available for now
-    
+        # Dynamically load media types from actual data
+        media_types = sorted(basic_ig_df['media_type'].dropna().unique())
+        content_type = st.selectbox("Content Type", ["All"] + media_types)
+
     with col2:
-        content_type = st.selectbox("Content Type", ["All", "Image", "Video", "Carousel", "Reel"])
-    
-    with col3:
+        basic_ig_df['created_timestamp'] = pd.to_datetime(basic_ig_df['created_timestamp'])
         default_start = basic_ig_df['created_timestamp'].min().date()
         default_end = basic_ig_df['created_timestamp'].max().date()
         date_range = st.date_input("Date Range", [default_start, default_end])
-    
-    # --- Filter Data ---
+
+    # --- SECTION 2: SCORECARDS ---
+    st.markdown("### 📊 Account Overview")
+    sc1, sc2 = st.columns(2)
+
+    with sc1:
+        account_name = ig_account_df['username'].iloc[0] if 'username' in ig_account_df.columns else "Instagram Account"
+        st.metric("Account", account_name)
+
+    with sc2:
+        followers_col = 'follower_count' if 'follower_count' in ig_account_df.columns else 'followers_count'
+        latest_followers = ig_account_df[followers_col].iloc[-1] if followers_col in ig_account_df.columns else "N/A"
+        st.metric("Total Followers", f"{int(latest_followers):,}" if pd.notna(latest_followers) else "N/A")
+
+    # Filtered copy of post data
     df = basic_ig_df.copy()
     df['timestamp'] = pd.to_datetime(df['created_timestamp'])
-    
-    # Filter by content type
+
+    # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
-    
-    # Filter by date
+
+    # Date filtering
     if isinstance(date_range, list) and len(date_range) == 2:
         start_date = pd.to_datetime(date_range[0])
         end_date = pd.to_datetime(date_range[1])
         df = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)]
-    
-    # Compute Engagement
+
+    # Clean engagement fields
     df['engagement'] = (
         df.get('like_count', 0) +
         df.get('comments_count', 0) +
         df.get('save_count', 0)
     )
-    
-    # Compute Engagement Rate (safe division)
-    df['engagement_rate'] = df['like_count'] / df['video_photo_impressions'].replace(0, pd.NA)
-    
-    # SECTION 2: Top-Level Metrics
-    st.markdown("### 📊 Post-Level Summary Metrics")
-    kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
-    
-    with kpi_col1:
-        st.metric("Total Posts", f"{len(df['post_id'].unique()):,}")
-    
-    with kpi_col2:
-        st.metric("Total Impressions", f"{int(df['video_photo_impressions'].sum()):,}")
-    
-    with kpi_col3:
-        avg_er = df['engagement_rate'].mean()
-        st.metric("Avg Engagement Rate", f"{avg_er:.1%}" if pd.notna(avg_er) else "N/A")
+
+    df['engagement_rate'] = df['video_photo_engagement'] / df['video_photo_reach'].replace(0, pd.NA)
+
+    # --- SECOND ROW OF SCORECARDS (FILTERED) ---
+    st.markdown("### 📈 Post Metrics")
+    kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
+
+    with kpi1:
+        post_count = df[df.get('is_story', False) != True]['post_id'].nunique()
+        st.metric("Total Posts", f"{post_count:,}")
+
+    with kpi2:
+        total_reach = df['video_photo_reach'].sum()
+        st.metric("Total Reach", f"{int(total_reach):,}")
+
+    with kpi3:
+        follower_gain = ig_account_df['follower_count'].diff().sum() if 'follower_count' in ig_account_df.columns else 0
+        st.metric("Followers Gained", f"{int(follower_gain):,}")
+
+    with kpi4:
+        total_likes = df['like_count'].sum()
+        st.metric("Like Count", f"{int(total_likes):,}")
+
+    with kpi5:
+        avg_eng_rate = df['engagement_rate'].mean()
+        st.metric("Engagement Rate", f"{avg_eng_rate:.1%}" if pd.notna(avg_eng_rate) else "N/A")
 
 
     # SECTION 3: Top Performing Posts Table
