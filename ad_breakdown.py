@@ -202,17 +202,29 @@ def main():
     if "filter_on" in breakdown_info:
         df = df[df[breakdown_info["filter_on"]] == breakdown_info["filter_value"]]
     
-    selected_dates = st.date_input("Select date range:", [min_date, max_date])
-
-    # Convert to list if needed
-    if isinstance(selected_dates, (datetime, pd.Timestamp)):
-        # Only one date was selected (or returned), treat it as both start and end
-        start_date = end_date = selected_dates
-    elif isinstance(selected_dates, (list, tuple)) and len(selected_dates) == 2:
-        start_date, end_date = selected_dates
+    # Convert date column and sort
+    df['date'] = pd.to_datetime(df['date'])
+    
+    if not df.empty:
+        min_date = df['date'].min()
+        max_date = df['date'].max()
+        selected_dates = st.date_input("Select date range:", [min_date, max_date])
+    
+        # Gracefully handle single date selection
+        if isinstance(selected_dates, (datetime, pd.Timestamp)):
+            start_date = end_date = selected_dates
+        elif isinstance(selected_dates, (list, tuple)) and len(selected_dates) == 2:
+            start_date, end_date = selected_dates
+        else:
+            st.warning("Please select a valid date range.")
+            return
+    
+        # Apply date filter
+        df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
     else:
-        st.warning("Please select a valid date range.")
-        return  # stop the app gracefully if date range is invalid
+        st.warning("No data available for the selected breakdown.")
+        return
+
 
     
     # === Multiselect breakdown filter ===
