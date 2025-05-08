@@ -222,7 +222,9 @@ def main():
     if not df.empty:
         min_date = df['date'].min()
         max_date = df['date'].max()
-        selected_dates = st.date_input("Select date range:", [min_date, max_date])
+        default_start = max_date - pd.Timedelta(days=30)
+        selected_dates = st.date_input("Select date range:", [default_start, max_date])
+
     
         # Gracefully handle single date selection
         if isinstance(selected_dates, (datetime, pd.Timestamp)):
