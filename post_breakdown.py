@@ -132,6 +132,7 @@ def main():
     # Filtered copy of post data
     df = basic_ig_df.copy()
     df['timestamp'] = pd.to_datetime(df['created_timestamp'])
+    st.dataframe(df)
 
     # Content type filtering
     if content_type != "All":
