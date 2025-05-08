@@ -320,58 +320,52 @@ def main():
     
     col_left, col_right = st.columns(2)
 
-    # --- RIGHT: Delivery Insights ---
     with col_left:
         st.subheader("📊 Platform & Device Breakdown")
     
-        # --- Dropdowns ---
+        # Select view
         view_option = st.selectbox("View breakdown by:", ["Device", "Platform"])
-        metric_option = st.selectbox("Metric to display:", ["Spend", "Clicks", "Impressions"])
     
-        # --- Dataset Selection ---
+        # Copy and filter ad-level data
         if view_option == "Device":
             pie_df = basic_device_df.copy()
-            pie_col = "device_platform"
         else:
             pie_df = basic_platform_df.copy()
-            pie_col = "publisher_platform"
-    
-        # --- Metric Mapping ---
-        metric_mapping = {
-            "Spend": "spend",
-            "Clicks": "inline_link_clicks",
-            "Impressions": "impressions"
-        }
-        metric_col = metric_mapping[metric_option]
-        display_label = f"{metric_option} by {'Device' if view_option == 'Device' else 'Platform'}"
-    
-        # --- Filter and Build Chart ---
+
         pie_df['date'] = pd.to_datetime(pie_df['date'])
         pie_df = pie_df[
             (pie_df['date'] >= start_date) & 
             (pie_df['date'] <= end_date)
         ]
     
-        if pie_col in pie_df.columns and metric_col in pie_df.columns:
+        # Choose column and label
+        if view_option == "Device":
+            pie_col = "device_platform"
+            display_label = "Spend by Device"
+        else:
+            pie_col = "publisher_platform"
+            display_label = "Spend by Platform"
+    
+        # Build pie chart
+        if pie_col in pie_df.columns:
             pie_summary = (
-                pie_df.groupby(pie_col)[metric_col]
+                pie_df.groupby(pie_col)['spend']
                 .sum()
                 .reset_index()
-                .rename(columns={pie_col: 'Category', metric_col: 'Value'})
+                .rename(columns={pie_col: 'Category', 'spend': 'Spend'})
             )
     
             fig_pie = px.pie(
                 pie_summary,
                 names='Category',
-                values='Value',
+                values='Spend',
                 title=display_label,
                 template='plotly_white'
             )
             fig_pie.update_traces(textinfo='percent+label')
             st.plotly_chart(fig_pie, use_container_width=True)
         else:
-            st.info(f"{pie_col} or {metric_col} not available in dataset.")
-
+            st.info(f"{pie_col} data not available.")
 
 
     # --- RIGHT: Video Watch-Through Rate ---
