@@ -377,7 +377,6 @@ def main():
     with col_right:
         st.subheader("🔗 URL Performance Breakdown")
 
-        st.write(basic_url_df)
         # Clean and filter
         url_df = basic_url_df.copy()
         url_df['date'] = pd.to_datetime(url_df['date_day'])
