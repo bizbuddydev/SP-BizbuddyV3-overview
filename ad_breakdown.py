@@ -287,7 +287,7 @@ def main():
     )
     
     # Compute CTR and CPC
-    daily_summary["ctr"] = (daily_summary["inline_link_clicks"] / daily_summary["impressions"]) * 100
+    daily_summary["ctr"] = (daily_summary["inline_link_clicks"] / daily_summary["impressions"])
     daily_summary["cpc"] = daily_summary["spend"] / daily_summary["inline_link_clicks"]
     daily_summary = daily_summary.replace([float("inf"), -float("inf")], pd.NA).fillna(0)
     
