@@ -146,6 +146,10 @@ def main():
         st.warning("No data available for selected filters.")
         return
 
+    st.write(start_date) 
+    st.write(end_date)
+    st.write(df)
+
     # Clean engagement fields
     df['engagement'] = (
         df.get('like_count', 0) +
