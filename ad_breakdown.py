@@ -162,7 +162,7 @@ def get_data():
     #Get delivery platform and device
     url_dataset_id = "facebook_ads_facebook_ads"
     url_table_id = "facebook_ads__url_report"
-    basic_url_df = pull_ad_data(platform_dataset_id, platform_table_id)
+    basic_url_df = pull_ad_data(basic_url_df, url_table_id)
 
     #return all dfs
     return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df, basic_url_df
