@@ -204,6 +204,8 @@ def main():
         },
     }
 
+    col_left, col_right = st.columns(2)
+
     # === User selects breakdown ===
     selected_breakdown = st.selectbox("Break down by:", list(breakdown_options.keys()))
     breakdown_info = breakdown_options[selected_breakdown]
