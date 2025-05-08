@@ -100,7 +100,7 @@ def get_data():
 def main():
     basic_ig_df, ig_account_df, pa_df = get_data()
     st.title("📱 Social Post Breakdown")
-    st.write(basic_ig_df)
+    #st.write(basic_ig_df)
 
     # SECTION 1: Filters
     st.markdown("### 🔧 Filter Options")
