@@ -134,7 +134,6 @@ def get_data():
     return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df
 
 def main():
-    st.set_page_config(page_title="Social Post Breakdown", layout="wide")
     st.title("📱 Social Post Breakdown")
 
     # SECTION 1: Filters
