@@ -204,14 +204,16 @@ def main():
     
     selected_dates = st.date_input("Select date range:", [min_date, max_date])
 
-    # Ensure selected_dates is always a range (list/tuple of 2)
-    if isinstance(selected_dates, list) or isinstance(selected_dates, tuple):
-        if len(selected_dates) == 2:
-            start_date, end_date = selected_dates
-        else:
-            start_date = end_date = selected_dates[0]
-    else:
+    # Convert to list if needed
+    if isinstance(selected_dates, (datetime, pd.Timestamp)):
+        # Only one date was selected (or returned), treat it as both start and end
         start_date = end_date = selected_dates
+    elif isinstance(selected_dates, (list, tuple)) and len(selected_dates) == 2:
+        start_date, end_date = selected_dates
+    else:
+        st.warning("Please select a valid date range.")
+        return  # stop the app gracefully if date range is invalid
+
     
     # === Multiselect breakdown filter ===
     group_values = df[group_col].dropna().unique().tolist()
