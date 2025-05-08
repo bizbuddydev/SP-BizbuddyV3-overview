@@ -106,7 +106,7 @@ def get_data():
 # Layout
 def main():
 
-    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df, basic_url_df = get_data()
+    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_device_df, basic_platform_df, basic_url_df = get_data()
 
     df = get_sample_data()
 
