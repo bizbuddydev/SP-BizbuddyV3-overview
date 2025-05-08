@@ -112,8 +112,8 @@ def main():
 
     with col2:
         basic_ig_df['created_timestamp'] = pd.to_datetime(basic_ig_df['created_timestamp'])
-        default_start = basic_ig_df['created_timestamp'].min().date()
         default_end = basic_ig_df['created_timestamp'].max().date()
+        default_start = default_end - timedelta(days=30)
         date_range = st.date_input("Date Range", [default_start, default_end])
 
     # --- SECTION 2: SCORECARDS ---
@@ -141,7 +141,7 @@ def main():
     if isinstance(date_range, list) and len(date_range) == 2:
         start_date = pd.to_datetime(date_range[0])
         end_date = pd.to_datetime(date_range[1])
-        df = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)]
+        df = df[(df['timestamp'].dt.date >= start_date.date()) & (df['timestamp'].dt.date <= end_date.date())]
 
     # Clean engagement fields
     df['engagement'] = (
@@ -175,7 +175,6 @@ def main():
     with kpi5:
         avg_eng_rate = df['engagement_rate'].mean()
         st.metric("Engagement Rate", f"{avg_eng_rate:.1%}" if pd.notna(avg_eng_rate) else "N/A")
-
 
     # SECTION 3: Top Performing Posts Table
     st.markdown("### 🔥 Top Performing Posts")
