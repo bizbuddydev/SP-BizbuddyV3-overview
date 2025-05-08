@@ -119,7 +119,7 @@ def main():
     
     # --- Filter Data ---
     df = basic_ig_df.copy()
-    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    df['timestamp'] = pd.to_datetime(df['created_timestamp'])
     
     # Filter by content type
     if content_type != "All":
