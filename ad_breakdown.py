@@ -238,9 +238,6 @@ def main():
         st.warning("No data available for the selected breakdown.")
         return
 
-
-
-    
     # === Multiselect breakdown filter ===
     group_values = df[group_col].dropna().unique().tolist()
     with st.expander(f"🔍 Filter by {selected_breakdown} values", expanded=False):
@@ -284,82 +281,7 @@ def main():
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("### 📊 General Performance Overview")
 
-    # Dimension selection
-    dimension_options = ["Campaign", "Ad Set", "Placement", "Location"]
-    selected_dimension = st.selectbox("Break down by:", dimension_options)
-
-    # Dynamic value filter for the selected dimension
-    unique_values = df[selected_dimension].unique().tolist()
-    selected_value = st.selectbox(f"Filter by {selected_dimension}:", ["All"] + unique_values)
-
-    # Apply filter if not 'All'
-    if selected_value != "All":
-        df = df[df[selected_dimension] == selected_value]
-
-    # --- Date Filter ---
-    st.markdown("### 📅 Filter by Date")
-    min_date = df["Date"].min()
-    max_date = df["Date"].max()
-    start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
-
-    # Filter by date
-    df = df[(df["Date"] >= pd.to_datetime(start_date)) & (df["Date"] <= pd.to_datetime(end_date))]
-
-    # --- KPI summary ---
-    kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
-    with kpi_col1:
-        st.metric("Total Spend", f"${df['Spend'].sum():,.0f}")
-    with kpi_col2:
-        st.metric("Total Impressions", f"{df['Impressions'].sum():,.0f}")
-    with kpi_col3:
-        st.metric("Total Conversions", f"{df['Conversions'].sum():,.0f}")
-
-    # --- Time Series + Table Side-by-Side ---
-    st.markdown("### 📈 Performance Over Time")
-    left_col, right_col = st.columns([2, 1])
-
-    daily_summary = (
-        df.groupby("Date")
-        .agg({
-            "Spend": "sum",
-            "Impressions": "sum",
-            "Clicks": "sum",
-            "Conversions": "sum",
-            "CTR": "mean",
-            "CPA": "mean"
-        })
-        .reset_index()
-    )
-
-    with left_col:
-        fig = px.line(
-            daily_summary,
-            x="Date",
-            y="Spend",
-            title="Daily Spend",
-            template="plotly_white"
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-    with right_col:
-        st.markdown("#### Daily Metrics")
-        st.dataframe(daily_summary.style.format({
-            "Spend": "${:,.0f}",
-            "Impressions": "{:,.0f}",
-            "Clicks": "{:,.0f}",
-            "Conversions": "{:,.0f}",
-            "CTR": "{:.2f}%",
-            "CPA": "${:.2f}"
-        }))
-
-        st.markdown("---")
-    st.markdown("### 🔍 Granular Breakdown")
-
-    col_left, col_right = st.columns(2)
-
-    # --- LEFT: Demographic Breakdown ---
     with col_left:
         st.subheader("Demographic Breakdown")
 
