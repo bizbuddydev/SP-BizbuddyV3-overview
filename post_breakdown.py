@@ -137,6 +137,8 @@ def main():
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
 
+    st.write(df)
+
     # Date filtering using standard date format
     if not df.empty and isinstance(selected_dates, list) and len(selected_dates) == 2:
         start_date = selected_dates[0]
@@ -144,11 +146,11 @@ def main():
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     else:
         st.warning("No data available for selected filters.")
+        st.write(start_date) 
+        st.write(end_date)
         return
 
-    st.write(start_date) 
-    st.write(end_date)
-    st.write(df)
+
 
     # Clean engagement fields
     df['engagement'] = (
