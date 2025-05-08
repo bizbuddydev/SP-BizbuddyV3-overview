@@ -137,9 +137,11 @@ def main():
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
 
-    # Date filtering (replacing broken version with known-working structure)
-    if not df.empty:
-        df = df[(df['timestamp'] >= pd.to_datetime(selected_dates[0])) & (df['timestamp'] <= pd.to_datetime(selected_dates[1]))]
+    # Date filtering (with explicit .dt.date comparison)
+    if not df.empty and isinstance(selected_dates, list) and len(selected_dates) == 2:
+        start_date = pd.to_datetime(selected_dates[0]).date()
+        end_date = pd.to_datetime(selected_dates[1]).date()
+        df = df[df['timestamp'].dt.date.between(start_date, end_date)]
     else:
         st.warning("No data available for selected filters.")
         return
@@ -176,6 +178,7 @@ def main():
     with kpi5:
         avg_eng_rate = df['engagement_rate'].mean()
         st.metric("Engagement Rate", f"{avg_eng_rate:.1%}" if pd.notna(avg_eng_rate) else "N/A")
+
 
     # SECTION 3: Top Performing Posts Table
     st.markdown("### 🔥 Top Performing Posts")
