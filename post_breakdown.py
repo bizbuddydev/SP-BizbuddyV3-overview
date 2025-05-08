@@ -139,7 +139,7 @@ def main():
     )
     
     # Compute Engagement Rate (safe division)
-    df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
+    df['engagement_rate'] = df['like_count' / df['video_photo_impressions'].replace(0, pd.NA)
     
     # SECTION 2: Top-Level Metrics
     st.markdown("### 📊 Post-Level Summary Metrics")
