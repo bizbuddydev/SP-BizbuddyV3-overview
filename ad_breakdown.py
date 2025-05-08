@@ -209,6 +209,12 @@ def main():
     start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
     df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
 
+    # Multiselect filter
+    selected_groups = st.multiselect(f"Filter by {selected_breakdown}:", options=group_values, default=group_values)
+    
+    # Filter the DataFrame
+    df = df[df[group_col].isin(selected_groups)]
+
     # === KPI summary ===
     st.markdown("### 📌 Summary Metrics")
     kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
