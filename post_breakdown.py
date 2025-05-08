@@ -158,13 +158,36 @@ def main():
 
     # SECTION 3: Top Performing Posts Table
     st.markdown("### 🔥 Top Performing Posts")
-    st.dataframe(pd.DataFrame({
-        "Post ID": [101, 102, 103],
-        "Impressions": [12000, 11500, 11000],
-        "Engagements": [540, 470, 460],
-        "Engagement Rate": ["4.5%", "4.1%", "4.2%"],
-        "Posted On": ["2024-04-10", "2024-04-08", "2024-04-06"]
-    }))
+    
+    # Use correct column name for post ID
+    post_id_col = "post_id" if "post_id" in df.columns else "id"
+    
+    # Compute engagement if not already done
+    df['engagement'] = (
+        df.get('like_count', 0) +
+        df.get('comments_count', 0) +
+        df.get('save_count', 0)
+    )
+    df['engagement_rate'] = df['engagement'] / df['impressions'].replace(0, pd.NA)
+    df['posted_on'] = pd.to_datetime(df['timestamp']).dt.date
+    
+    # Select top 10 by engagement
+    top_posts = (
+        df[[post_id_col, 'impressions', 'engagement', 'engagement_rate', 'posted_on']]
+        .sort_values(by='engagement', ascending=False)
+        .dropna(subset=['impressions'])
+        .head(10)
+        .copy()
+    )
+    
+    # Format nicely
+    top_posts['engagement_rate'] = top_posts['engagement_rate'].apply(lambda x: f"{x:.1%}")
+    
+    # Rename for display
+    top_posts.columns = ['Post ID', 'Impressions', 'Engagements', 'Engagement Rate', 'Posted On']
+    
+    # Show table
+    st.dataframe(top_posts.reset_index(drop=True))
 
     # SECTION 4: Engagement Breakdown
     st.markdown("### 📈 Engagement Over Time")
