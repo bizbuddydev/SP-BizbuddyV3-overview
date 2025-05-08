@@ -156,18 +156,90 @@ def get_data():
 def main():
 
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
-    st.write("basic_ad_df")
-    st.write(basic_ad_df.columns)
-    st.write("basic_adset_df")
-    st.write(basic_adset_df.columns)
-    st.write("basic_campaign_df")
-    st.write(basic_campaign_df.columns)
-    st.write("basic_demo_df")
-    st.write(basic_demo_df.columns)
-    
-    st.title("Ad Performance Overview")
 
     df = get_sample_data()
+
+    st.title("📊 Ad Performance Overview")
+
+    # === REAL DATA SOURCES (assumed already loaded globally) ===
+    # basic_campaign_df, basic_adset_df, basic_ad_df, basic_demo_df
+
+    # === Breakdown options mapping ===
+    breakdown_options = {
+        "Campaign": {
+            "df": basic_campaign_df,
+            "group_col": "campaign_name"
+        },
+        "Ad Set": {
+            "df": basic_adset_df,
+            "group_col": "adset_name"
+        },
+        "Ad": {
+            "df": basic_ad_df,
+            "group_col": "ad_name"
+        },
+        "Age": {
+            "df": basic_demo_df,
+            "group_col": "Group",
+            "filter_on": "Breakdown",
+            "filter_value": "Age"
+        },
+        "Region": {
+            "df": basic_demo_df,
+            "group_col": "Group",
+            "filter_on": "Breakdown",
+            "filter_value": "Region"
+        }
+    }
+
+    # === User selects breakdown ===
+    selected_breakdown = st.selectbox("Break down by:", list(breakdown_options.keys()))
+    breakdown_info = breakdown_options[selected_breakdown]
+    df = breakdown_info["df"].copy()
+    group_col = breakdown_info["group_col"]
+
+    # === Optional demo filtering ===
+    if "filter_on" in breakdown_info:
+        df = df[df[breakdown_info["filter_on"]] == breakdown_info["filter_value"]]
+
+    # === Standardize and filter dates ===
+    df['date'] = pd.to_datetime(df['date'])
+    min_date = df['date'].min()
+    max_date = df['date'].max()
+    start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
+    df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
+
+    # === KPI summary ===
+    st.markdown("### 📌 Summary Metrics")
+    kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
+    with kpi_col1:
+        st.metric("Total Spend", f"${df['spend'].sum():,.0f}")
+    with kpi_col2:
+        st.metric("Total Impressions", f"{df['impressions'].sum():,.0f}")
+    with kpi_col3:
+        st.metric("Total Link Clicks", f"{df['inline_link_clicks'].sum():,.0f}")
+
+    # === Time Series Chart ===
+    st.markdown("### 📈 Spend Over Time")
+    daily_summary = (
+        df.groupby(["date", group_col])
+        .agg({
+            "spend": "sum",
+            "impressions": "sum",
+            "inline_link_clicks": "sum"
+        })
+        .reset_index()
+    )
+
+    fig = px.line(
+        daily_summary,
+        x="date",
+        y="spend",
+        color=group_col,
+        title=f"Spend Over Time by {selected_breakdown}",
+        template="plotly_white"
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### 📊 General Performance Overview")
 
