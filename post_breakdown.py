@@ -25,23 +25,6 @@ credentials = service_account.Credentials.from_service_account_info(
 # Initialize BigQuery client
 client = bigquery.Client(credentials=credentials, project=PROJECT_ID)
 
-# Basic Ad Data
-def pull_ad_data(dataset_id, table_id):
-    # Build the table reference
-    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
-    # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE account_id = {FB_PAGE_ID}"
-    try:
-        # Execute the query
-        query_job = client.query(query)
-        result = query_job.result()
-        # Convert the result to a DataFrame
-        data = result.to_dataframe()
-        return data
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-        return None
-
 @st.cache_data
 def pull_ig_insights(dataset_id, table_id):
     # Build the table reference
@@ -95,26 +78,7 @@ def pull_post_analysis(dataset_id, table_id):
 
 @st.cache_data
 def get_data():
-    #Get basic ads
-    ad_dataset_id = "facebook_ads"
-    ad_table_id = "basic_ad"
-    basic_ad_df = pull_ad_data(ad_dataset_id, ad_table_id)
-
-    #Get ad set
-    adset_dataset_id = "facebook_ads"
-    adset_table_id = "basic_ad_set"
-    basic_adset_df = pull_ad_data(adset_dataset_id, adset_table_id)
-
-    #Get ad set
-    campaign_dataset_id = "facebook_ads"
-    campaign_table_id = "basic_campaign"
-    basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
-
-    #Get demo set
-    demo_dataset_id = "client"
-    demo_table_id = "ad_demographics"
-    basic_demo_df = pull_ad_data(demo_dataset_id, demo_table_id)
-
+    
     #Get ig posts
     ig_dataset_id = "instagram_business_instagram_business"
     ig_table_id = "instagram_business__posts"
