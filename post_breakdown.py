@@ -139,17 +139,17 @@ def main():
     )
     
     # Compute Engagement Rate (safe division)
-    df['engagement_rate'] = df['engagement'] / df['impressions'].replace(0, pd.NA)
+    df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
     
     # SECTION 2: Top-Level Metrics
     st.markdown("### 📊 Post-Level Summary Metrics")
     kpi_col1, kpi_col2, kpi_col3 = st.columns(3)
     
     with kpi_col1:
-        st.metric("Total Posts", f"{len(df):,}")
+        st.metric("Total Posts", f"{len(df['post_id'].unique):,}")
     
     with kpi_col2:
-        st.metric("Total Impressions", f"{int(df['impressions'].sum()):,}")
+        st.metric("Total Impressions", f"{int(df['video_photo_impressions'].sum()):,}")
     
     with kpi_col3:
         avg_er = df['engagement_rate'].mean()
