@@ -139,8 +139,8 @@ def main():
 
     # Date filtering (with explicit .dt.date comparison)
     if not df.empty and isinstance(selected_dates, list) and len(selected_dates) == 2:
-        start_date = pd.to_datetime(selected_dates[0]).date()
-        end_date = pd.to_datetime(selected_dates[1]).date()
+        start_date = pd.to_datetime(selected_dates[0])
+        end_date = pd.to_datetime(selected_dates[1])
         df = df[df['timestamp'].dt.date.between(start_date, end_date)]
     else:
         st.warning("No data available for selected filters.")
