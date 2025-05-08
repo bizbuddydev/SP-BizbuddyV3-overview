@@ -61,56 +61,7 @@ def pull_ad_data(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
-@st.cache_data
-def pull_ig_insights(dataset_id, table_id):
-    # Build the table reference
-    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
-    # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE user_id = {IG_USER_ID}"
-    try:
-        # Execute the query
-        query_job = client.query(query)
-        result = query_job.result()
-        # Convert the result to a DataFrame
-        data = result.to_dataframe()
-        return data
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-        return None
 
-@st.cache_data
-def pull_ig_account_insights(dataset_id, table_id):
-    # Build the table reference
-    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
-    # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE id = {IG_USER_ID}"
-    try:
-        # Execute the query
-        query_job = client.query(query)
-        result = query_job.result()
-        # Convert the result to a DataFrame
-        data = result.to_dataframe()
-        return data
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-        return None
-
-@st.cache_data
-def pull_post_analysis(dataset_id, table_id):
-    # Build the table reference
-    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
-    # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}`"
-    try:
-        # Execute the query
-        query_job = client.query(query)
-        result = query_job.result()
-        # Convert the result to a DataFrame
-        data = result.to_dataframe()
-        return data
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-        return None
 
 @st.cache_data
 def get_data():
@@ -134,21 +85,6 @@ def get_data():
     demo_table_id = "ad_demographics"
     basic_demo_df = pull_ad_data(demo_dataset_id, demo_table_id)
 
-    #Get ig posts
-    ig_dataset_id = "instagram_business_instagram_business"
-    ig_table_id = "instagram_business__posts"
-    basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
-
-    #Get ig_account
-    ig_account_dataset_id = "instagram_business"
-    ig_account_table_id = "user_insights"
-    ig_account_df = pull_ig_account_insights(ig_account_dataset_id, ig_account_table_id)
-
-    #Get analyzed posts
-    client_dataset_id = "client"
-    client_table_id = "sp_analyzed_posts"
-    pa_df = pull_post_analysis(client_dataset_id, client_table_id)
-
     #Get delivery device
     device_dataset_id = "facebook_ads"
     device_table_id = "delivery_device"
@@ -165,7 +101,7 @@ def get_data():
     basic_url_df = pull_ad_data(url_dataset_id, url_table_id)
 
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df, basic_url_df
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_device_df, basic_platform_df, basic_url_df
 
 # Layout
 def main():
