@@ -124,7 +124,7 @@ def get_data():
     adset_table_id = "basic_ad_set"
     basic_adset_df = pull_ad_data(adset_dataset_id, adset_table_id)
 
-    #Get ad set
+    #Get campaign
     campaign_dataset_id = "facebook_ads"
     campaign_table_id = "basic_campaign"
     basic_campaign_df = pull_ad_data(campaign_dataset_id, campaign_table_id)
@@ -139,7 +139,7 @@ def get_data():
     ig_table_id = "instagram_business__posts"
     basic_ig_df = pull_ig_insights(ig_dataset_id, ig_table_id)
 
-    #Get ig posts
+    #Get ig_account
     ig_account_dataset_id = "instagram_business"
     ig_account_table_id = "user_insights"
     ig_account_df = pull_ig_account_insights(ig_account_dataset_id, ig_account_table_id)
@@ -149,13 +149,23 @@ def get_data():
     client_table_id = "sp_analyzed_posts"
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
+    #Get delivery device
+    device_dataset_id = "facebook_ads"
+    device_table_id = "delivery_device"
+    basic_device_df = pull_ad_data(device_dataset_id, device_table_id)
+
+    #Get delivery platform and device
+    platform_dataset_id = "facebook_ads"
+    platform_table_id = "delivery_platform"
+    basic_platform_df = pull_ad_data(platform_dataset_id, platform_table_id)
+
     #return all dfs
-    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df
+    return basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df
 
 # Layout
 def main():
 
-    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
+    basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df, basic_device_df, basic_platform_df = get_data()
 
     df = get_sample_data()
 
