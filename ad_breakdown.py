@@ -202,12 +202,16 @@ def main():
     if "filter_on" in breakdown_info:
         df = df[df[breakdown_info["filter_on"]] == breakdown_info["filter_value"]]
     
-    # === Standardize and filter dates ===
-    df['date'] = pd.to_datetime(df['date'])
-    min_date = df['date'].min()
-    max_date = df['date'].max()
-    start_date, end_date = st.date_input("Select date range:", [min_date, max_date])
-    df = df[(df["date"] >= pd.to_datetime(start_date)) & (df["date"] <= pd.to_datetime(end_date))]
+    selected_dates = st.date_input("Select date range:", [min_date, max_date])
+
+    # Ensure selected_dates is always a range (list/tuple of 2)
+    if isinstance(selected_dates, list) or isinstance(selected_dates, tuple):
+        if len(selected_dates) == 2:
+            start_date, end_date = selected_dates
+        else:
+            start_date = end_date = selected_dates[0]
+    else:
+        start_date = end_date = selected_dates
     
     # === Multiselect breakdown filter ===
     group_values = df[group_col].dropna().unique().tolist()
