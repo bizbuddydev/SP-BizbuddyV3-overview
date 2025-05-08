@@ -283,6 +283,8 @@ def main():
     )
     st.plotly_chart(fig, use_container_width=True)
 
+    st.markdown("### 🎨 Creative Performance Breakdown")
+    
     col_left, col_right = st.columns(2)
 
     # --- RIGHT: Delivery Insights ---
@@ -305,7 +307,6 @@ def main():
         st.write("- Ad C: Below Average")
 
         st.markdown("---")
-    st.markdown("### 🎨 Creative Performance Breakdown")
 
     # --- RIGHT: Video Watch-Through Rate ---
     with col_right:
