@@ -173,9 +173,9 @@ def main():
     
     # Select top 10 by engagement
     top_posts = (
-        df[[post_id_col, 'impressions', 'engagement', 'engagement_rate', 'posted_on']]
+        df[[post_id_col, 'video_photo_impressions', 'engagement', 'engagement_rate', 'posted_on']]
         .sort_values(by='engagement', ascending=False)
-        .dropna(subset=['impressions'])
+        .dropna(subset=['video_photo_impressions'])
         .head(10)
         .copy()
     )
