@@ -168,8 +168,8 @@ def main():
         df.get('comments_count', 0) +
         df.get('save_count', 0)
     )
-    df['engagement_rate'] = df['engagement'] / df['impressions'].replace(0, pd.NA)
-    df['posted_on'] = pd.to_datetime(df['timestamp']).dt.date
+    df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
+    df['posted_on'] = pd.to_datetime(df['created_timestamp']).dt.date
     
     # Select top 10 by engagement
     top_posts = (
