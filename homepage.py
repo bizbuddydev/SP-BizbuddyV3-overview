@@ -211,43 +211,50 @@ def main():
 
     st.title("Stay Pineapple Social Performance Dash")
 
-    #Get data
+    # Get data
     basic_ad_df, basic_adset_df, basic_campaign_df, basic_demo_df, basic_ig_df, ig_account_df, pa_df = get_data()
 
-    # Normalize today and get 30 days ago as a date (not Timestamp)
+    # Normalize today and define time periods
     today = pd.to_datetime("today").normalize()
-    last_30_days = (today - timedelta(days=30)).date()  # <-- this is key
-    
-    # Convert IG datetime to date
-    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
-    
-    # Convert ad datetime to date (if needed)
-    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date']).dt.date
-    
-    # Now this comparison will work
-    basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
-    basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
+    last_30_days = (today - timedelta(days=30)).date()
+    prev_30_days = (today - timedelta(days=60)).date()
 
-    #Build Basic Scorecards
+    # Convert dates
+    basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date']).dt.date
+    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
+
+    # Filter into current and previous periods
+    ad_current = basic_ad_df[basic_ad_df["date"] >= last_30_days]
+    ad_previous = basic_ad_df[(basic_ad_df["date"] < last_30_days) & (basic_ad_df["date"] >= prev_30_days)]
+
+    # Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
+
     with ad_overview:
         st.subheader("Recent Ad Performance")
         st.write("Last 30 Days")
-        # Create 3 equally spaced columns
+
         ad_sc1, ad_sc2, ad_sc3 = st.columns(3)
 
         with ad_sc1:
-            impressions = int(basic_ad_df["impressions"].sum())
-            st.metric(label="Total Impressions", value=f"{impressions:,}", delta="+5%")  # You can replace delta later
+            current_impressions = ad_current["impressions"].sum()
+            previous_impressions = ad_previous["impressions"].sum()
+            delta_impressions = ((current_impressions - previous_impressions) / previous_impressions * 100) if previous_impressions > 0 else 0
+            st.metric("Total Impressions", f"{int(current_impressions):,}", delta=f"{delta_impressions:+.1f}%")
 
         with ad_sc2:
-            total_clicks = basic_ad_df["inline_link_clicks"].sum()
-            ctr = (total_clicks / impressions) * 100 if impressions > 0 else 0
-            st.metric(label="Click-Through Rate", value=f"{ctr:.1f}%", delta="-0.3%")
+            current_clicks = ad_current["inline_link_clicks"].sum()
+            previous_clicks = ad_previous["inline_link_clicks"].sum()
+            current_ctr = (current_clicks / current_impressions * 100) if current_impressions > 0 else 0
+            previous_ctr = (previous_clicks / previous_impressions * 100) if previous_impressions > 0 else 0
+            delta_ctr = current_ctr - previous_ctr
+            st.metric("Click-Through Rate", f"{current_ctr:.1f}%", delta=f"{delta_ctr:+.1f}%")
 
         with ad_sc3:
-            conversions = int(basic_ad_df["spend"].sum())
-            st.metric(label="Spend", value=f"{conversions:,}", delta="+12%")
+            current_spend = ad_current["spend"].sum()
+            previous_spend = ad_previous["spend"].sum()
+            delta_spend = ((current_spend - previous_spend) / previous_spend * 100) if previous_spend > 0 else 0
+            st.metric("Spend", f"${int(current_spend):,}", delta=f"{delta_spend:+.1f}%")
 
 
     with post_overview:
