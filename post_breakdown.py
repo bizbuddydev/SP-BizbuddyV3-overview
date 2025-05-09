@@ -329,17 +329,19 @@ def main():
         if creative_col in pa_df.columns and 'video_photo_reach' in pa_df.columns:
             reach_summary = (
                 pa_df
-                .groupby(creative_col)['video_photo_reach']
-                .mean()
+                .groupby(creative_col)
+                .agg(Average_Reach=('video_photo_reach', 'mean'), Post_Count=('video_photo_reach', 'count'))
                 .reset_index()
-                .rename(columns={creative_col: selected_creative, 'video_photo_reach': 'Average Reach'})
-                .sort_values('Average Reach', ascending=False)
+                .rename(columns={creative_col: selected_creative})
+                .sort_values('Average_Reach', ascending=False)
             )
+
     
             fig_creative = px.bar(
                 reach_summary,
                 x=selected_creative,
-                y='Average Reach',
+                y='Average_Reach',
+                hover_data={'Post_Count': True},
                 title=f"Average Reach by {selected_creative}",
                 template='plotly_white'
             )
