@@ -182,7 +182,7 @@ def main():
     if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
         account_df = account_df[(account_df['date'] >= start_date) & (account_df['date'] <= end_date)]
-        ig_post_df = ig_post_df[(ig_post_df['posted_on'] >= start_date) & (ig_post_df['posted_on'] <= end_date)]
+        ig_post_df = ig_post_df[(ig_post_df['created_timestamp'] >= start_date) & (ig_post_df['created_timestamp'] <= end_date)]
     else:
         st.warning("Invalid date selection.")
         return
