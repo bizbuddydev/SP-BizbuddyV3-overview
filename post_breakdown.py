@@ -312,7 +312,47 @@ def main():
 
     # SECTION 5: Creative Analysis
     st.markdown("### 🖼️ Creative Insights (Placeholder)")
-    st.markdown("This section will show analysis of creative hooks, CTA clarity, tone, and text presence.")
+    col_left, col_right = st.columns([2, 1])
 
+    with col_left:
+        st.markdown("#### 📊 Performance by Creative Element")
+        
+        creative_options = {
+            "Post Theme": "main_theme",
+            "Main Imagery": "main_focus",
+            "Background Imagery": "background_imagery"
+        }
+    
+        selected_creative = st.selectbox("Break down reach by:", list(creative_options.keys()))
+        creative_col = creative_options[selected_creative]
+    
+        if creative_col in pa_df.columns and 'video_photo_reach' in pa_df.columns:
+            reach_summary = (
+                pa_df
+                .groupby(creative_col)['video_photo_reach']
+                .mean()
+                .reset_index()
+                .rename(columns={creative_col: selected_creative, 'video_photo_reach': 'Average Reach'})
+                .sort_values('Average Reach', ascending=False)
+            )
+    
+            fig_creative = px.bar(
+                reach_summary,
+                x=selected_creative,
+                y='Average Reach',
+                title=f"Average Reach by {selected_creative}",
+                template='plotly_white'
+            )
+            st.plotly_chart(fig_creative, use_container_width=True)
+        else:
+            st.info("Creative column or reach data missing in `pa_df`.")
+    
+    with col_right:
+        st.markdown("#### 🔍 In-Depth Creative Analysis (Coming Soon)")
+        st.markdown("This area will surface tone, clarity, hook types, and visual cues extracted from your top-performing posts.")
+        st.markdown("- e.g. Tone: Informal vs Professional")
+        st.markdown("- Hook Style: Curiosity, Pain-Point, Testimonial")
+        st.markdown("- Text Density, CTA presence, Layout heuristics")
+        
 if __name__ == "__main__":
     main()
