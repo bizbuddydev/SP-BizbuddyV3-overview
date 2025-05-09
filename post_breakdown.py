@@ -81,7 +81,7 @@ def pull_follows_data(dataset_id, table_id):
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` WHERE id_ig = 779159629;"
+    query = f"SELECT * FROM `{table_ref}` WHERE ig_id = 779159629;"
     try:
         # Execute the query
         query_job = client.query(query)
