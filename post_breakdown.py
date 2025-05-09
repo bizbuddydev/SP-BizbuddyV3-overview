@@ -383,8 +383,27 @@ def main():
     
     with col_right:
         st.markdown("#### 🔍 Hashtag Breakdown")
-        hashtag_stats = compute_hashtag_performance(pa_df, hashtag_col='hashtags', metric_col='video_photo_reach')
-        st.dataframe(hashtag_stats)
+
+        # Make sure all needed columns exist
+        X_OPTIONS = ['video_len', 'shot_count', 'object_count', 'caption_length', 'avg_shot_len']
+        st.markdown("### 🎥 Reach vs. Creative Attributes")
+        
+        selected_x = st.selectbox("Choose a variable to compare with Reach:", X_OPTIONS)
+        
+        # Filter out rows with missing data in either selected or reach
+        filtered_df = pa_df[[selected_x, 'video_photo_reach']].dropna()
+        
+        fig = px.scatter(
+            filtered_df,
+            x=selected_x,
+            y='reach',
+            trendline='ols',
+            title=f"Reach vs. {selected_x}",
+            labels={selected_x: selected_x.replace('_', ' ').title(), 'reach': 'Reach'},
+            opacity=0.7
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
         
 if __name__ == "__main__":
     main()
