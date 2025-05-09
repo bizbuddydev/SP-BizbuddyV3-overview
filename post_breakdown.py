@@ -254,7 +254,7 @@ def main():
     metric_options = {
         "Reach": "video_photo_reach",
         "Likes": "like_count",
-        "Saves": "video_photo_saves",
+        "Saves": "video_photo_saved",
         "Engagement Rate": "engagement_rate",
         "Followers Gained": "follower_count"
     }
