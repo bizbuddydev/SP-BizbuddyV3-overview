@@ -358,7 +358,7 @@ def main():
     # SECTION 5: Creative Analysis
     st.markdown("### Creative Insights")
     st.write("Below is data extracted from videos and Reels on this account. Full post analysis is coming soon as we continue development.")
-    col_left, col_right = st.columns([2, 1])
+    col_left, col_right = st.columns(2)
 
     with col_left:
         st.markdown("#### 📊 Performance by Creative Element")
