@@ -219,35 +219,33 @@ def main():
     last_30_days = (today - timedelta(days=30)).date()
     prev_30_days = (today - timedelta(days=60)).date()
 
-    # Convert dates
+    # Convert and filter ad data
     basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date']).dt.date
-    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
-
-    # Filter into current and previous periods
-    basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
+    ad_current = basic_ad_df[basic_ad_df["date"] >= last_30_days]
     ad_previous = basic_ad_df[(basic_ad_df["date"] < last_30_days) & (basic_ad_df["date"] >= prev_30_days)]
 
-    # Filter into current and previous periods
-    basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
-    basic_ig_df = basic_ig_df[(basic_ig_df["date"] < last_30_days) & (basic_ig_df["date"] >= prev_30_days)]
+    # Convert and filter IG data
+    basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
+    ig_current = basic_ig_df[basic_ig_df["date"] >= last_30_days]
+    ig_previous = basic_ig_df[(basic_ig_df["date"] < last_30_days) & (basic_ig_df["date"] >= prev_30_days)]
 
-    # Build Basic Scorecards
+    # Build Scorecards Section
     ad_overview, post_overview = st.columns(2)
 
+    # --- Ad Scorecards ---
     with ad_overview:
         st.subheader("Recent Ad Performance")
         st.write("Last 30 Days")
-
         ad_sc1, ad_sc2, ad_sc3 = st.columns(3)
 
         with ad_sc1:
-            current_impressions = basic_ad_df["impressions"].sum()
+            current_impressions = ad_current["impressions"].sum()
             previous_impressions = ad_previous["impressions"].sum()
             delta_impressions = ((current_impressions - previous_impressions) / previous_impressions * 100) if previous_impressions > 0 else 0
             st.metric("Total Impressions", f"{int(current_impressions):,}", delta=f"{delta_impressions:+.1f}%")
 
         with ad_sc2:
-            current_clicks = basic_ad_df["inline_link_clicks"].sum()
+            current_clicks = ad_current["inline_link_clicks"].sum()
             previous_clicks = ad_previous["inline_link_clicks"].sum()
             current_ctr = (current_clicks / current_impressions * 100) if current_impressions > 0 else 0
             previous_ctr = (previous_clicks / previous_impressions * 100) if previous_impressions > 0 else 0
@@ -255,29 +253,35 @@ def main():
             st.metric("Click-Through Rate", f"{current_ctr:.1f}%", delta=f"{delta_ctr:+.1f}%")
 
         with ad_sc3:
-            current_spend = basic_ad_df["spend"].sum()
+            current_spend = ad_current["spend"].sum()
             previous_spend = ad_previous["spend"].sum()
             delta_spend = ((current_spend - previous_spend) / previous_spend * 100) if previous_spend > 0 else 0
             st.metric("Spend", f"${int(current_spend):,}", delta=f"{delta_spend:+.1f}%")
 
-
+    # --- Organic IG Scorecards ---
     with post_overview:
         st.subheader("Recent Organic Performance")
         st.write("Last 30 Days")
-        # Create 3 equally spaced columns
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
         with ig_sc1:
-            total_posts = basic_ig_df["post_id"].nunique()  # Or use 'media_id' depending on schema
-            st.metric(label="Total Posts", value=f"{total_posts:,}", delta="+7%")
+            current_posts = ig_current["post_id"].nunique()
+            previous_posts = ig_previous["post_id"].nunique()
+            delta_posts = ((current_posts - previous_posts) / previous_posts * 100) if previous_posts > 0 else 0
+            st.metric("Total Posts", f"{current_posts:,}", delta=f"{delta_posts:+.1f}%")
         
         with ig_sc2:
-            likes = basic_ig_df["like_count"].sum()
-            st.metric(label="Like Count", value=f"{likes}", delta="-30%")
+            current_likes = ig_current["like_count"].sum()
+            previous_likes = ig_previous["like_count"].sum()
+            delta_likes = ((current_likes - previous_likes) / previous_likes * 100) if previous_likes > 0 else 0
+            st.metric("Like Count", f"{int(current_likes):,}", delta=f"{delta_likes:+.1f}%")
         
         with ig_sc3:
-            post_comments = int(basic_ig_df.get("comment_count", pd.Series([0])).sum())  # Optional if exists
-            st.metric(label="Comments", value=f"{post_comments:,}", delta="+4%")
+            current_comments = ig_current.get("comments_count", pd.Series([0])).sum()
+            previous_comments = ig_previous.get("comments_count", pd.Series([0])).sum()
+            delta_comments = ((current_comments - previous_comments) / previous_comments * 100) if previous_comments > 0 else 0
+            st.metric("Comments", f"{int(current_comments):,}", delta=f"{delta_comments:+.1f}%")
+
 
 
     # Step 1: Ensure 'date' is datetime
