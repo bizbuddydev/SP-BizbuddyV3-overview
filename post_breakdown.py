@@ -170,7 +170,7 @@ def main():
     
     if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-        ig_account_df = = ig_account_df[(ig_account_df['date'] >= start_date) & (ig_account_df['date'] <= end_date)]
+        ig_account_df = ig_account_df[(ig_account_df['date'] >= start_date) & (ig_account_df['date'] <= end_date)]
     else:
         st.warning("Invalid date selection.")
         return
