@@ -278,19 +278,35 @@ def main():
         template="plotly_white"
     )
     
-    # Prepare hoverable post markers
-    hover_points = pd.to_datetime(df['created_timestamp']).dt.normalize().dropna().unique()
+    # Normalize timestamps
+    df['post_date'] = pd.to_datetime(df['created_timestamp']).dt.normalize()
+    post_lines = df[['post_date', 'caption']].drop_duplicates().copy()
     
+    # Create hover text: Date + start of caption
+    post_lines['hover'] = post_lines.apply(
+        lambda row: f"{row['post_date'].strftime('%b %d, %Y')}<br>{row['caption'][:50]}..." if pd.notna(row['caption']) else f"{row['post_date'].strftime('%b %d, %Y')}<br>No caption",
+        axis=1
+    )
+    
+    # Add full-height vertical lines
+    for date in post_lines['post_date']:
+        fig.add_vline(
+            x=date,
+            line_dash="dot",
+            line_color="gray",
+            opacity=0.3
+        )
+    
+    # Add invisible scatter points for hovertext
     fig.add_trace(go.Scatter(
-        x=hover_points,
-        y=[plot_df['Value'].max()] * len(hover_points),  # place at top of chart
+        x=post_lines['post_date'],
+        y=[plot_df['Value'].max()] * len(post_lines),
         mode="markers",
-        marker=dict(size=8, color="gray", symbol="line-ns-open"),
-        hovertext=["Post published"] * len(hover_points),
+        marker=dict(size=8, color="rgba(0,0,0,0)"),
+        hovertext=post_lines['hover'],
         hoverinfo="text",
         showlegend=False
     ))
-
     st.plotly_chart(fig, use_container_width=True)
 
 
