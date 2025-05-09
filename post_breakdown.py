@@ -96,21 +96,25 @@ def pull_follows_data(dataset_id, table_id):
 
 
 def compute_hashtag_performance(df, hashtag_col='hashtags', metric_col='reach'):
-    from collections import defaultdict
-    import numpy as np
-
     performance_dict = defaultdict(list)
 
-    for _, row in df.iterrows():
+    for idx, row in df.iterrows():
         hashtags = row.get(hashtag_col)
         metric_value = row.get(metric_col)
+
+        # Try to parse stringified lists
+        if isinstance(hashtags, str):
+            try:
+                hashtags = ast.literal_eval(hashtags)
+            except Exception:
+                hashtags = []
 
         if isinstance(hashtags, list) and pd.notnull(metric_value):
             for tag in hashtags:
                 performance_dict[str(tag).lower()].append(metric_value)
 
-    # Create result only if dict is not empty
     if not performance_dict:
+        print("⚠️ No hashtags matched or none had valid reach values.")
         return pd.DataFrame(columns=['hashtag', 'count', f'avg_{metric_col}'])
 
     result = pd.DataFrame([
