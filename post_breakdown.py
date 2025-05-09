@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 # Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
@@ -92,6 +93,40 @@ def pull_follows_data(dataset_id, table_id):
     except Exception as e:
         st.error(f"Error fetching data: {e}")
         return None
+
+
+def compute_hashtag_performance(df, hashtag_col='hashtags', metric_col='reach'):
+    """
+    Computes average performance for each individual hashtag.
+
+    Parameters:
+    - df: pandas DataFrame with at least 'hashtags' and performance metric columns
+    - hashtag_col: column containing lists of hashtags
+    - metric_col: performance metric to average (e.g., 'reach')
+
+    Returns:
+    - A DataFrame with columns: ['hashtag', 'count', 'avg_reach']
+    """
+    performance_dict = defaultdict(list)
+
+    for _, row in df.iterrows():
+        hashtags = row[hashtag_col]
+        metric_value = row[metric_col]
+
+        if isinstance(hashtags, list):
+            for tag in hashtags:
+                performance_dict[tag.lower()].append(metric_value)
+
+    # Build result DataFrame
+    result = pd.DataFrame([
+        {'hashtag': tag, 'count': len(values), f'avg_{metric_col}': sum(values) / len(values)}
+        for tag, values in performance_dict.items()
+    ])
+
+    # Sort by average performance
+    result = result.sort_values(by=f'avg_{metric_col}', ascending=False).reset_index(drop=True)
+    return result
+
 
 @st.cache_data
 def get_data():
@@ -355,6 +390,7 @@ def main():
         st.markdown("- e.g. Tone: Informal vs Professional")
         st.markdown("- Hook Style: Curiosity, Pain-Point, Testimonial")
         st.markdown("- Text Density, CTA presence, Layout heuristics")
+        hashtag_stats = compute_hashtag_performance(pa_df, hashtag_col='hashtags', metric_col='video_image_reach')
         
 if __name__ == "__main__":
     main()
