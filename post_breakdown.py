@@ -278,7 +278,8 @@ def main():
         template="plotly_white"
     )
     # Add vertical lines for post dates
-    post_dates = pd.to_datetime(df['created_timestamp']).dt.date.unique()
+    post_dates = pd.to_datetime(df['created_timestamp']).dt.normalize().unique()
+
     for post_date in post_dates:
         fig.add_vline(
             x=post_date,
