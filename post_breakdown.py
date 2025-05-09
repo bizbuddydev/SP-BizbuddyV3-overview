@@ -218,19 +218,21 @@ def main():
      # --- SECTION 3: Top Performing Posts Table ---
     st.markdown("### 🔥 Top Performing Posts")
 
-    df['engagement'] = (
-        df.get('like_count', 0) +
-        df.get('comments_count', 0) +
-        df.get('save_count', 0)
+    ig_post_df = basiv_if_df.copy()
+    
+    ig_post_df['engagement'] = (
+        ig_post_df.get('like_count', 0) +
+        ig_post_df.get('comments_count', 0) +
+        ig_post_df.get('save_count', 0)
     )
 
-    df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
-    df['posted_on'] = pd.to_datetime(df['created_timestamp']).dt.strftime("%B %d, %Y")
+    ig_post_df['engagement_rate'] = ig_post_df['engagement'] / ig_post_df['video_photo_impressions'].replace(0, pd.NA)
+    ig_post_df['posted_on'] = pd.to_datetime(ig_post_df['created_timestamp']).dt.strftime("%B %d, %Y")
 
     post_id_col = "post_id" if "post_id" in df.columns else "id"
 
     top_posts = (
-        df[[post_id_col, 'video_photo_reach', 'like_count', 'video_photo_saves', 'caption', 'posted_on']]
+        ig_post_df[[post_id_col, 'video_photo_reach', 'like_count', 'video_photo_saved', 'post_caption', 'posted_on']]
         .sort_values(by='video_photo_reach', ascending=False)
         .dropna(subset=['video_photo_reach'])
         .head(10)
