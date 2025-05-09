@@ -212,6 +212,7 @@ def main():
     with kpi3:
         follower_gain = account_df['follower_count'].sum() if 'follower_count' in ig_account_df.columns else 0
         st.metric("Followers Gained", f"{int(follower_gain):,}")
+        st.markdown("<span style='font-size: 0.75em; color: gray;'>*Metric only tracks 2 months back</span>", unsafe_allow_html=True)
 
     with kpi4:
         total_likes = df['like_count'].sum()
