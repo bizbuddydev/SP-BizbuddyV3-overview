@@ -277,6 +277,17 @@ def main():
         labels={"date": "Date", "Value": selected_metric_label},
         template="plotly_white"
     )
+    # Add vertical lines for post dates
+    post_dates = pd.to_datetime(df['created_timestamp']).dt.date.unique()
+    for post_date in post_dates:
+        fig.add_vline(
+            x=post_date,
+            line_dash="dot",
+            line_color="gray",
+            opacity=0.4,
+            annotation_text="",  # or "Post"
+            annotation_position="top left"
+        )
     st.plotly_chart(fig, use_container_width=True)
 
 
