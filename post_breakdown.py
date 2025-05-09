@@ -390,7 +390,7 @@ def main():
         st.markdown("- e.g. Tone: Informal vs Professional")
         st.markdown("- Hook Style: Curiosity, Pain-Point, Testimonial")
         st.markdown("- Text Density, CTA presence, Layout heuristics")
-        hashtag_stats = compute_hashtag_performance(pa_df, hashtag_col='hashtags', metric_col='video_image_reach')
+        hashtag_stats = compute_hashtag_performance(pa_df, hashtag_col='hashtags', metric_col='video_photo_reach')
         
 if __name__ == "__main__":
     main()
