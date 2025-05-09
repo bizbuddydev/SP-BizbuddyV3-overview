@@ -149,6 +149,10 @@ def main():
         total_followers = follows_df.loc[follows_df['day_rank'] == 1, 'followers_count'].iloc[0]
         st.metric("Total Followers", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
 
+    with sc2:
+        media_count = follows_df.loc[follows_df['day_rank'] == 1, 'media_count'].iloc[0]
+        st.metric("Media Count", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
+
     # Filtered copy of post data
     df = basic_ig_df.copy()
     df['date'] = pd.to_datetime(df['created_timestamp']).dt.date
