@@ -114,7 +114,7 @@ def compute_hashtag_performance(df, hashtag_col='hashtags', metric_col='reach'):
                 performance_dict[str(tag).lower()].append(metric_value)
 
     if not performance_dict:
-        print("⚠️ No hashtags matched or none had valid reach values.")
+        st.write("⚠️ No hashtags matched or none had valid reach values.")
         return pd.DataFrame(columns=['hashtag', 'count', f'avg_{metric_col}'])
 
     result = pd.DataFrame([
