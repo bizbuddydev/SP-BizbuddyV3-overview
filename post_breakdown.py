@@ -215,39 +215,30 @@ def main():
         avg_eng_rate = df['engagement_rate'].mean()
         st.metric("Engagement Rate", f"{avg_eng_rate:.1%}" if pd.notna(avg_eng_rate) else "N/A")
 
-
-
-    # SECTION 3: Top Performing Posts Table
+     # --- SECTION 3: Top Performing Posts Table ---
     st.markdown("### 🔥 Top Performing Posts")
-    
-    # Use correct column name for post ID
-    post_id_col = "post_id" if "post_id" in df.columns else "id"
-    
-    # Compute engagement if not already done
+
     df['engagement'] = (
         df.get('like_count', 0) +
         df.get('comments_count', 0) +
         df.get('save_count', 0)
     )
+
     df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
-    df['posted_on'] = pd.to_datetime(df['created_timestamp']).dt.date
-    
-    # Select top 10 by engagement
+    df['posted_on'] = pd.to_datetime(df['created_timestamp']).dt.strftime("%B %d, %Y")
+
+    post_id_col = "post_id" if "post_id" in df.columns else "id"
+
     top_posts = (
-        df[[post_id_col, 'video_photo_impressions', 'engagement', 'engagement_rate', 'posted_on']]
-        .sort_values(by='engagement', ascending=False)
-        .dropna(subset=['video_photo_impressions'])
+        df[[post_id_col, 'video_photo_reach', 'like_count', 'video_photo_saves', 'caption', 'posted_on']]
+        .sort_values(by='video_photo_reach', ascending=False)
+        .dropna(subset=['video_photo_reach'])
         .head(10)
         .copy()
     )
-    
-    # Format nicely
-    top_posts['engagement_rate'] = top_posts['engagement_rate'].apply(lambda x: f"{x:.1%}")
-    
-    # Rename for display
-    top_posts.columns = ['Post ID', 'Impressions', 'Engagements', 'Engagement Rate', 'Posted On']
-    
-    # Show table
+
+    top_posts.columns = ['Post ID', 'Reach', 'Likes', 'Saves', 'Caption', 'Posted On']
+
     st.dataframe(top_posts.reset_index(drop=True))
 
     # SECTION 4: Engagement Breakdown
