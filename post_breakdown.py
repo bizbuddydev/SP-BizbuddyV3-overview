@@ -96,36 +96,29 @@ def pull_follows_data(dataset_id, table_id):
 
 
 def compute_hashtag_performance(df, hashtag_col='hashtags', metric_col='reach'):
-    """
-    Computes average performance for each individual hashtag.
+    from collections import defaultdict
+    import numpy as np
 
-    Parameters:
-    - df: pandas DataFrame with at least 'hashtags' and performance metric columns
-    - hashtag_col: column containing lists of hashtags
-    - metric_col: performance metric to average (e.g., 'reach')
-
-    Returns:
-    - A DataFrame with columns: ['hashtag', 'count', 'avg_reach']
-    """
     performance_dict = defaultdict(list)
 
     for _, row in df.iterrows():
-        hashtags = row[hashtag_col]
-        metric_value = row[metric_col]
+        hashtags = row.get(hashtag_col)
+        metric_value = row.get(metric_col)
 
-        if isinstance(hashtags, list):
+        if isinstance(hashtags, list) and pd.notnull(metric_value):
             for tag in hashtags:
-                performance_dict[tag.lower()].append(metric_value)
+                performance_dict[str(tag).lower()].append(metric_value)
 
-    # Build result DataFrame
+    # Create result only if dict is not empty
+    if not performance_dict:
+        return pd.DataFrame(columns=['hashtag', 'count', f'avg_{metric_col}'])
+
     result = pd.DataFrame([
-        {'hashtag': tag, 'count': len(values), f'avg_{metric_col}': sum(values) / len(values)}
+        {'hashtag': tag, 'count': len(values), f'avg_{metric_col}': np.mean(values)}
         for tag, values in performance_dict.items()
     ])
 
-    # Sort by average performance
-    result = result.sort_values(by=f'avg_{metric_col}', ascending=False).reset_index(drop=True)
-    return result
+    return result.sort_values(by=f'avg_{metric_col}', ascending=False).reset_index(drop=True)
 
 
 @st.cache_data
