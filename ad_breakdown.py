@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 
 # Set page components
-st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
+st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="🪧")
 
 # Define links to other pages
 PAGES = {
