@@ -287,7 +287,7 @@ def main():
             line_color="gray",
             opacity=0.4
         )
-        st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
 
     # SECTION 5: Creative Analysis
