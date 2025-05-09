@@ -161,6 +161,8 @@ def main():
     account_df['follower_count'] = account_df['follower_count'].fillna(0)
 
     ig_post_df = basic_ig_df.copy()
+    ig_post_df['posted_on'] = pd.to_datetime(ig_post_df['created_timestamp']).dt.strftime("%B %d, %Y")
+
 
     # Content type filtering
     if content_type != "All":
@@ -180,7 +182,7 @@ def main():
     if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
         account_df = account_df[(account_df['date'] >= start_date) & (account_df['date'] <= end_date)]
-        ig_post_df = ig_post_df[(ig_post_df['date'] >= start_date) & (ig_post_df['date'] <= end_date)]
+        ig_post_df = ig_post_df[(ig_post_df['posted_on'] >= start_date) & (ig_post_df['posted_on'] <= end_date)]
     else:
         st.warning("Invalid date selection.")
         return
@@ -228,8 +230,7 @@ def main():
     )
 
     ig_post_df['engagement_rate'] = ig_post_df['engagement'] / ig_post_df['video_photo_impressions'].replace(0, pd.NA)
-    ig_post_df['posted_on'] = pd.to_datetime(ig_post_df['created_timestamp']).dt.strftime("%B %d, %Y")
-
+    
     post_id_col = "post_id" if "post_id" in df.columns else "id"
 
     top_posts = (
