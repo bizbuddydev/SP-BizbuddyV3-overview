@@ -151,7 +151,7 @@ def main():
 
     with sc3:
         media_count = follows_df.loc[follows_df['day_rank'] == 1, 'media_count'].iloc[0]
-        st.metric("Media Count", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
+        st.metric("Media Count", f"{int(media_count):,}" if pd.notna(total_followers) else "N/A")
 
     # Filtered copy of post data
     df = basic_ig_df.copy()
