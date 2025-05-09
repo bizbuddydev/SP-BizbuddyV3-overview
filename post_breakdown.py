@@ -378,12 +378,9 @@ def main():
             st.info("Creative column or reach data missing in `pa_df`.")
     
     with col_right:
-        st.markdown("#### 🔍 In-Depth Creative Analysis (Coming Soon)")
-        st.markdown("This area will surface tone, clarity, hook types, and visual cues extracted from your top-performing posts.")
-        st.markdown("- e.g. Tone: Informal vs Professional")
-        st.markdown("- Hook Style: Curiosity, Pain-Point, Testimonial")
-        st.markdown("- Text Density, CTA presence, Layout heuristics")
+        st.markdown("#### 🔍 Hashtag Breakdown")
         hashtag_stats = compute_hashtag_performance(pa_df, hashtag_col='hashtags', metric_col='video_photo_reach')
+        st.dataframe(hashtag_stats)
         
 if __name__ == "__main__":
     main()
