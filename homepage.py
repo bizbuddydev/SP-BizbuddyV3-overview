@@ -265,19 +265,19 @@ def main():
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
         with ig_sc1:
-            current_posts = ig_current["post_id"].nunique()
+            current_posts = basic_ig_df["post_id"].nunique()
             previous_posts = ig_previous["post_id"].nunique()
             delta_posts = ((current_posts - previous_posts) / previous_posts * 100) if previous_posts > 0 else 0
             st.metric("Total Posts", f"{current_posts:,}", delta=f"{delta_posts:+.1f}%")
         
         with ig_sc2:
-            current_likes = ig_current["like_count"].sum()
+            current_likes = basic_ig_df["like_count"].sum()
             previous_likes = ig_previous["like_count"].sum()
             delta_likes = ((current_likes - previous_likes) / previous_likes * 100) if previous_likes > 0 else 0
             st.metric("Like Count", f"{int(current_likes):,}", delta=f"{delta_likes:+.1f}%")
         
         with ig_sc3:
-            current_comments = ig_current.get("comments_count", pd.Series([0])).sum()
+            current_comments = basic_ig_df.get("comments_count", pd.Series([0])).sum()
             previous_comments = ig_previous.get("comments_count", pd.Series([0])).sum()
             delta_comments = ((current_comments - previous_comments) / previous_comments * 100) if previous_comments > 0 else 0
             st.metric("Comments", f"{int(current_comments):,}", delta=f"{delta_comments:+.1f}%")
