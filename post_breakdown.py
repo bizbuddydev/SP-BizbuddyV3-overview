@@ -12,7 +12,7 @@ from collections import defaultdict
 import statsmodels.api as sm
 
 # Set page components
-st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
+st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📱")
 
 # Define links to other pages
 PAGES = {
