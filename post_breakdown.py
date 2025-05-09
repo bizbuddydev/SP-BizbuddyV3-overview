@@ -77,6 +77,23 @@ def pull_post_analysis(dataset_id, table_id):
         return None
 
 @st.cache_data
+def pull_follows_data(dataset_id, table_id):
+    # Build the table reference
+    table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
+    # Query to fetch all data from the table
+    query = f"SELECT * FROM `{table_ref}` WHERE id_ig = 779159629;"
+    try:
+        # Execute the query
+        query_job = client.query(query)
+        result = query_job.result()
+        # Convert the result to a DataFrame
+        data = result.to_dataframe()
+        return data
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")
+        return None
+
+@st.cache_data
 def get_data():
     
     #Get ig posts
@@ -94,11 +111,15 @@ def get_data():
     client_table_id = "sp_analyzed_posts"
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
+    ig_follows_dataset_id = "client"
+    ig_follows_dataset_id = "account_info"
+    follows_df = pull_follows_data(ig_follows_dataset_id, ig_follows_dataset_id)
+
     #return all dfs
-    return basic_ig_df, ig_account_df, pa_df
+    return basic_ig_df, ig_account_df, pa_df, follows_df
 
 def main():
-    basic_ig_df, ig_account_df, pa_df = get_data()
+    basic_ig_df, ig_account_df, pa_df, follows_df = get_data()
     st.title("📱 Social Post Breakdown")
 
     # --- SECTION 1: FILTERS ---
@@ -125,9 +146,8 @@ def main():
         st.metric("Account", account_name)
 
     with sc2:
-        followers_col = 'follower_count' if 'follower_count' in ig_account_df.columns else 'followers_count'
-        latest_followers = ig_account_df[followers_col].sum() if followers_col in ig_account_df.columns else "N/A"
-        st.metric("Total Followers", f"{int(latest_followers):,}" if pd.notna(latest_followers) else "N/A")
+        total_followers = follows_df.loc[follows_df['day_rank'] == 1, 'followers_count'].iloc[0]
+        st.metric("Total Followers", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
 
     # Filtered copy of post data
     df = basic_ig_df.copy()
@@ -153,9 +173,6 @@ def main():
     else:
         st.warning("Invalid date selection.")
         return
-
-
-
 
     # Clean engagement fields
     df['engagement'] = (
