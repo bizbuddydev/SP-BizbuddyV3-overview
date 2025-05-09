@@ -318,8 +318,8 @@ def main():
         st.markdown("#### 📊 Performance by Creative Element")
         
         creative_options = {
-            "Post Theme": "main_theme",
-            "Main Imagery": "main_focus",
+            "Post Theme": "general_theme",
+            "Main Imagery": "imagery_group",
             "Background Imagery": "background_imagery"
         }
     
