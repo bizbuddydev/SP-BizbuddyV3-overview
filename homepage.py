@@ -224,8 +224,12 @@ def main():
     basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
 
     # Filter into current and previous periods
-    ad_current = basic_ad_df[basic_ad_df["date"] >= last_30_days]
+    basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
     ad_previous = basic_ad_df[(basic_ad_df["date"] < last_30_days) & (basic_ad_df["date"] >= prev_30_days)]
+
+    # Filter into current and previous periods
+    basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
+    basic_ig_df = basic_ig_df[(basic_ig_df["date"] < last_30_days) & (basic_ig_df["date"] >= prev_30_days)]
 
     # Build Basic Scorecards
     ad_overview, post_overview = st.columns(2)
@@ -237,13 +241,13 @@ def main():
         ad_sc1, ad_sc2, ad_sc3 = st.columns(3)
 
         with ad_sc1:
-            current_impressions = ad_current["impressions"].sum()
+            current_impressions = basic_ad_df["impressions"].sum()
             previous_impressions = ad_previous["impressions"].sum()
             delta_impressions = ((current_impressions - previous_impressions) / previous_impressions * 100) if previous_impressions > 0 else 0
             st.metric("Total Impressions", f"{int(current_impressions):,}", delta=f"{delta_impressions:+.1f}%")
 
         with ad_sc2:
-            current_clicks = ad_current["inline_link_clicks"].sum()
+            current_clicks = basic_ad_df["inline_link_clicks"].sum()
             previous_clicks = ad_previous["inline_link_clicks"].sum()
             current_ctr = (current_clicks / current_impressions * 100) if current_impressions > 0 else 0
             previous_ctr = (previous_clicks / previous_impressions * 100) if previous_impressions > 0 else 0
@@ -251,7 +255,7 @@ def main():
             st.metric("Click-Through Rate", f"{current_ctr:.1f}%", delta=f"{delta_ctr:+.1f}%")
 
         with ad_sc3:
-            current_spend = ad_current["spend"].sum()
+            current_spend = basic_ad_df["spend"].sum()
             previous_spend = ad_previous["spend"].sum()
             delta_spend = ((current_spend - previous_spend) / previous_spend * 100) if previous_spend > 0 else 0
             st.metric("Spend", f"${int(current_spend):,}", delta=f"{delta_spend:+.1f}%")
