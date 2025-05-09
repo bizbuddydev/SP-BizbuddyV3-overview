@@ -258,15 +258,6 @@ def main():
     df['timestamp'] = pd.to_datetime(df['created_timestamp'])
     df['date'] = df['timestamp'].dt.date
     
-    # # Ensure engagement_rate exists if selected
-    # if selected_metric_label == "Engagement Rate":
-    #     df['engagement'] = (
-    #         df.get('like_count', 0) +
-    #         df.get('comments_count', 0) +
-    #         df.get('save_count', 0)
-    #     )
-    #     df['engagement_rate'] = df['video_photo_engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
-    
     # Followers Gained comes from ig_account_df
     if selected_metric_label == "Followers Gained":
         follower_df = account_df.copy()
