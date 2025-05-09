@@ -232,7 +232,7 @@ def main():
     post_id_col = "post_id" if "post_id" in df.columns else "id"
 
     top_posts = (
-        ig_post_df[[post_id_col, 'video_photo_reach', 'like_count', 'video_photo_saved', 'post_caption', 'posted_on']]
+        ig_post_df[['posted_on', 'video_photo_reach', 'like_count', 'video_photo_saved', 'post_caption']]
         .sort_values(by='video_photo_reach', ascending=False)
         .dropna(subset=['video_photo_reach'])
         .head(10)
