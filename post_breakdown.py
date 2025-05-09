@@ -14,6 +14,18 @@ import statsmodels.api as sm
 # Set page components
 st.set_page_config(page_title="SP Bizz Overview", layout="wide", page_icon="📊")
 
+# Define links to other pages
+PAGES = {
+    "📊 Overview": "https://sp-bizz-overview.streamlit.app/",
+    "🪧 Meta Ads Breakdown": "https://sp-bizz-ad.streamlit.app/",
+    "📱 Organic Ig Breakdown": "https://sp-bizz-organic.streamlit.app/",
+}
+
+# Sidebar navigation
+st.sidebar.title("Navigation")
+for page, url in PAGES.items():
+    st.sidebar.markdown(f"[**{page}**]({url})", unsafe_allow_html=True)
+
 #Load Vars
 PROJECT_ID = "bizbuddydemo-v3"
 FB_PAGE_ID = 12101296
