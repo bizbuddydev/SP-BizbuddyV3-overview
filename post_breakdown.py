@@ -153,6 +153,9 @@ def main():
     df = basic_ig_df.copy()
     df['date'] = pd.to_datetime(df['created_timestamp']).dt.date
 
+    account_df = ig_account_df.copy()
+    account_df['follower_count'] = account_df['follower_count'].fillna(0)
+
     # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
@@ -170,7 +173,7 @@ def main():
     
     if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-        ig_account_df = ig_account_df[(ig_account_df['date'] >= start_date) & (ig_account_df['date'] <= end_date)]
+        account_df = account_df[(account_df['date'] >= start_date) & (account_df['date'] <= end_date)]
     else:
         st.warning("Invalid date selection.")
         return
@@ -197,7 +200,7 @@ def main():
         st.metric("Total Reach", f"{int(total_reach):,}")
 
     with kpi3:
-        follower_gain = ig_account_df['follower_count'].sum() if 'follower_count' in ig_account_df.columns else 0
+        follower_gain = account_df['follower_count'].sum() if 'follower_count' in ig_account_df.columns else 0
         st.metric("Followers Gained", f"{int(follower_gain):,}")
 
     with kpi4:
