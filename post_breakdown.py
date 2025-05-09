@@ -344,7 +344,8 @@ def main():
 
 
     # SECTION 5: Creative Analysis
-    st.markdown("### 🖼️ Creative Insights (Placeholder)")
+    st.markdown("### Creative Insights")
+    st.write("Below is data extracted from videos and Reels on this account. Full post analysis is coming soon as we continue development.")
     col_left, col_right = st.columns([2, 1])
 
     with col_left:
@@ -383,8 +384,6 @@ def main():
             st.info("Creative column or reach data missing in `pa_df`.")
     
     with col_right:
-        st.markdown("#### 🔍 Hashtag Breakdown")
-
         # Make sure all needed columns exist
         X_OPTIONS = ['video_len', 'shot_count', 'object_count', 'caption_length', 'avg_shot_len']
         st.markdown("### 🎥 Reach vs. Creative Attributes")
