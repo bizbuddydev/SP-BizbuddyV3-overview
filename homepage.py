@@ -265,10 +265,17 @@ def main():
         ig_sc1, ig_sc2, ig_sc3 = st.columns(3)
 
         with ig_sc1:
-            current_posts = basic_ig_df["post_id"].nunique()
-            previous_posts = ig_previous["post_id"].nunique()
+            # Filter out story posts
+            non_story_current = ig_current[ig_current['is_story'] != True]
+            non_story_previous = ig_previous[ig_previous['is_story'] != True]
+            
+            # Count unique post_ids
+            current_posts = non_story_current["post_id"].nunique()
+            previous_posts = non_story_previous["post_id"].nunique()
             delta_posts = ((current_posts - previous_posts) / previous_posts * 100) if previous_posts > 0 else 0
+            
             st.metric("Total Posts", f"{current_posts:,}", delta=f"{delta_posts:+.1f}%")
+
         
         with ig_sc2:
             current_likes = basic_ig_df["like_count"].sum()
