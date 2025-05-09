@@ -247,26 +247,54 @@ def main():
 
     st.dataframe(top_posts.reset_index(drop=True))
 
-    # SECTION 4: Engagement Breakdown
+    # --- SECTION 4: Engagement Breakdown ---
     st.markdown("### 📈 Engagement Over Time")
-    col4, col5 = st.columns([2, 1])
-    with col4:
-        # Placeholder line chart
-        st.plotly_chart(px.line(
-            x=pd.date_range(start="2024-04-01", periods=10),
-            y=[100, 200, 180, 250, 300, 280, 260, 240, 210, 190],
-            labels={"x": "Date", "y": "Engagements"},
-            title="Daily Engagement Trend",
-            template="plotly_white"
-        ), use_container_width=True)
-    with col5:
-        st.markdown("##### Engagement by Type")
-        st.bar_chart(pd.DataFrame({
-            "Likes": [400],
-            "Comments": [120],
-            "Shares": [80],
-            "Saves": [40]
-        }))
+    
+    # Metric selection dropdown
+    metric_options = {
+        "Reach": "video_photo_reach",
+        "Likes": "like_count",
+        "Saves": "video_photo_saves",
+        "Engagement Rate": "engagement_rate",
+        "Followers Gained": "follower_count"
+    }
+    selected_metric_label = st.selectbox("Metric to display:", list(metric_options.keys()), index=0)
+    selected_metric_col = metric_options[selected_metric_label]
+    
+    # Prepare post-level metrics
+    df['timestamp'] = pd.to_datetime(df['created_timestamp'])
+    df['date'] = df['timestamp'].dt.date
+    
+    # Ensure engagement_rate exists if selected
+    if selected_metric_label == "Engagement Rate":
+        df['engagement'] = (
+            df.get('like_count', 0) +
+            df.get('comments_count', 0) +
+            df.get('save_count', 0)
+        )
+        df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
+    
+    # Followers Gained comes from ig_account_df
+    if selected_metric_label == "Followers Gained":
+        follower_df = ig_account_df.copy()
+        follower_df['date'] = pd.to_datetime(follower_df['date']).dt.date
+        follower_df = follower_df.groupby('date')[selected_metric_col].sum().reset_index()
+        plot_df = follower_df.rename(columns={selected_metric_col: 'Value'})
+    else:
+        plot_df = df.groupby('date')[selected_metric_col].sum().reset_index()
+        plot_df = plot_df.rename(columns={selected_metric_col: 'Value'})
+    
+    # Plot full-width chart
+    fig = px.line(
+        plot_df,
+        x='date',
+        y='Value',
+        title=f"{selected_metric_label} Over Time",
+        labels={"date": "Date", "Value": selected_metric_label},
+        template="plotly_white"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
 
     # SECTION 5: Creative Analysis
     st.markdown("### 🖼️ Creative Insights (Placeholder)")
