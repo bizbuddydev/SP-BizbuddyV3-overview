@@ -280,11 +280,11 @@ def main():
     
     # Normalize timestamps
     df['post_date'] = pd.to_datetime(df['created_timestamp']).dt.normalize()
-    post_lines = df[['post_date', 'caption']].drop_duplicates().copy()
+    post_lines = df[['post_date', 'post_caption']].drop_duplicates().copy()
     
     # Create hover text: Date + start of caption
     post_lines['hover'] = post_lines.apply(
-        lambda row: f"{row['post_date'].strftime('%b %d, %Y')}<br>{row['caption'][:50]}..." if pd.notna(row['caption']) else f"{row['post_date'].strftime('%b %d, %Y')}<br>No caption",
+        lambda row: f"{row['post_date'].strftime('%b %d, %Y')}<br>{row['post_caption'][:50]}..." if pd.notna(row['post_caption']) else f"{row['post_date'].strftime('%b %d, %Y')}<br>No caption",
         axis=1
     )
     
