@@ -218,7 +218,7 @@ def main():
      # --- SECTION 3: Top Performing Posts Table ---
     st.markdown("### 🔥 Top Performing Posts")
 
-    ig_post_df = basiv_if_df.copy()
+    ig_post_df = basic_ig_df.copy()
     
     ig_post_df['engagement'] = (
         ig_post_df.get('like_count', 0) +
