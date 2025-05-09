@@ -233,13 +233,15 @@ def main():
 
     # Convert and filter ad data
     basic_ad_df['date'] = pd.to_datetime(basic_ad_df['date']).dt.date
+    prev_ad_df = basic_ad_df.copy()
     basic_ad_df = basic_ad_df[basic_ad_df["date"] >= last_30_days]
-    ad_previous = basic_ad_df[(basic_ad_df["date"] < last_30_days) & (basic_ad_df["date"] >= prev_30_days)]
+    ad_previous = prev_ad_df[(prev_ad_df["date"] < last_30_days) & (prev_ad_df["date"] >= prev_30_days)]
 
     # Convert and filter IG data
     basic_ig_df['date'] = pd.to_datetime(basic_ig_df['created_timestamp']).dt.date
+    prev_ig_df = basic_ig_df.copy()
     basic_ig_df = basic_ig_df[basic_ig_df["date"] >= last_30_days]
-    ig_previous = basic_ig_df[(basic_ig_df["date"] < last_30_days) & (basic_ig_df["date"] >= prev_30_days)]
+    ig_previous = prev_ig_df[(prev_ig_df["date"] < last_30_days) & (prev_ig_df["date"] >= prev_30_days)]
 
     # Build Scorecards Section
     ad_overview, post_overview = st.columns(2)
