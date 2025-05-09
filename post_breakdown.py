@@ -160,6 +160,8 @@ def main():
     account_df = ig_account_df.copy()
     account_df['follower_count'] = account_df['follower_count'].fillna(0)
 
+    ig_post_df = basic_ig_df.copy()
+
     # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
@@ -178,6 +180,7 @@ def main():
     if start_date and end_date:
         df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
         account_df = account_df[(account_df['date'] >= start_date) & (account_df['date'] <= end_date)]
+        ig_post_df = ig_post_df[(ig_post_df['date'] >= start_date) & (ig_post_df['date'] <= end_date)]
     else:
         st.warning("Invalid date selection.")
         return
@@ -217,8 +220,6 @@ def main():
 
      # --- SECTION 3: Top Performing Posts Table ---
     st.markdown("### 🔥 Top Performing Posts")
-
-    ig_post_df = basic_ig_df.copy()
     
     ig_post_df['engagement'] = (
         ig_post_df.get('like_count', 0) +
