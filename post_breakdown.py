@@ -167,6 +167,7 @@ def main():
     # Content type filtering
     if content_type != "All":
         df = df[df['media_type'].str.lower() == content_type.lower()]
+        ig_post_df = ig_post_df[ig_post_df['media_type'].str.lower() == content_type.lower()]
 
     # Date filtering using standard date format
     start_date, end_date = None, None
