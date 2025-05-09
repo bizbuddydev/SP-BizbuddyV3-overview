@@ -266,7 +266,7 @@ def main():
 
         with ig_sc1:
             # Filter out story posts
-            non_story_current = ig_current[ig_current['is_story'] != True]
+            non_story_current = basic_ig_df[basic_ig_df['is_story'] != True]
             non_story_previous = ig_previous[ig_previous['is_story'] != True]
             
             # Count unique post_ids
