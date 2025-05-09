@@ -278,15 +278,19 @@ def main():
         template="plotly_white"
     )
     
-    post_dates = pd.to_datetime(df['created_timestamp']).dt.normalize().unique()
+    # Prepare hoverable post markers
+    hover_points = pd.to_datetime(df['created_timestamp']).dt.normalize().dropna().unique()
+    
+    fig.add_trace(go.Scatter(
+        x=hover_points,
+        y=[plot_df['Value'].max()] * len(hover_points),  # place at top of chart
+        mode="markers",
+        marker=dict(size=8, color="gray", symbol="line-ns-open"),
+        hovertext=["Post published"] * len(hover_points),
+        hoverinfo="text",
+        showlegend=False
+    ))
 
-    for post_date in post_dates:
-        fig.add_vline(
-            x=pd.Timestamp(post_date).to_pydatetime(),  # convert safely to native datetime
-            line_dash="dot",
-            line_color="gray",
-            opacity=0.4
-        )
     st.plotly_chart(fig, use_container_width=True)
 
 
