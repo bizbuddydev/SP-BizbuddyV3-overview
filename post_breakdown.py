@@ -112,8 +112,8 @@ def get_data():
     pa_df = pull_post_analysis(client_dataset_id, client_table_id)
 
     ig_follows_dataset_id = "client"
-    ig_follows_dataset_id = "account_info"
-    follows_df = pull_follows_data(ig_follows_dataset_id, ig_follows_dataset_id)
+    ig_follows_table_id = "account_info"
+    follows_df = pull_follows_data(ig_follows_dataset_id, ig_follows_table_id)
 
     #return all dfs
     return basic_ig_df, ig_account_df, pa_df, follows_df
