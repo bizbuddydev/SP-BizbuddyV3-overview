@@ -188,13 +188,6 @@ def main():
         st.warning("Invalid date selection.")
         return
 
-    # Clean engagement fields
-    df['engagement'] = (
-        df.get('like_count', 0) +
-        df.get('comments_count', 0) +
-        df.get('save_count', 0)
-    )
-
     df['engagement_rate'] = df['video_photo_engagement'] / df['video_photo_reach'].replace(0, pd.NA)
 
     # --- SECOND ROW OF SCORECARDS (FILTERED) ---
@@ -272,7 +265,7 @@ def main():
             df.get('comments_count', 0) +
             df.get('save_count', 0)
         )
-        df['engagement_rate'] = df['engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
+        df['engagement_rate'] = df['video_photo_engagement'] / df['video_photo_impressions'].replace(0, pd.NA)
     
     # Followers Gained comes from ig_account_df
     if selected_metric_label == "Followers Gained":
