@@ -284,8 +284,8 @@ def main():
             st.metric("Like Count", f"{int(current_likes):,}", delta=f"{delta_likes:+.1f}%")
         
         with ig_sc3:
-            current_comments = basic_ig_df.get("comments_count", pd.Series([0])).sum()
-            previous_comments = ig_previous.get("comments_count", pd.Series([0])).sum()
+            current_comments = basic_ig_df.get("comment_count", pd.Series([0])).sum()
+            previous_comments = ig_previous.get("comment_count", pd.Series([0])).sum()
             delta_comments = ((current_comments - previous_comments) / previous_comments * 100) if previous_comments > 0 else 0
             st.metric("Comments", f"{int(current_comments):,}", delta=f"{delta_comments:+.1f}%")
 
