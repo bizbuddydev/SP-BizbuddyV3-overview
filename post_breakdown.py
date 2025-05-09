@@ -139,7 +139,7 @@ def main():
 
     # --- SECTION 2: SCORECARDS ---
     st.markdown("### 📊 Account Overview")
-    sc1, sc2 = st.columns(2)
+    sc1, sc2, sc3 = st.columns(3)
 
     with sc1:
         account_name = basic_ig_df['username'].iloc[0]
@@ -149,7 +149,7 @@ def main():
         total_followers = follows_df.loc[follows_df['day_rank'] == 1, 'followers_count'].iloc[0]
         st.metric("Total Followers", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
 
-    with sc2:
+    with sc3:
         media_count = follows_df.loc[follows_df['day_rank'] == 1, 'media_count'].iloc[0]
         st.metric("Media Count", f"{int(total_followers):,}" if pd.notna(total_followers) else "N/A")
 
