@@ -263,7 +263,9 @@ def main():
         follower_df = account_df.copy()
         follower_df['date'] = pd.to_datetime(follower_df['date']).dt.date
         follower_df = follower_df.groupby('date')[selected_metric_col].sum().reset_index()
+        st.write(follower_df)
         plot_df = follower_df.rename(columns={selected_metric_col: 'Value'})
+        st.write(plot_df)
     else:
         plot_df = df.groupby('date')[selected_metric_col].sum().reset_index()
         plot_df = plot_df.rename(columns={selected_metric_col: 'Value'})
