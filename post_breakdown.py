@@ -396,7 +396,7 @@ def main():
         fig = px.scatter(
             filtered_df,
             x=selected_x,
-            y='reach',
+            y='video_photo_reach',
             trendline='ols',
             title=f"Reach vs. {selected_x}",
             labels={selected_x: selected_x.replace('_', ' ').title(), 'reach': 'Reach'},
